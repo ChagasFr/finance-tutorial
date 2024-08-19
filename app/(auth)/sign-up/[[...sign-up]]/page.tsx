@@ -16,7 +16,7 @@ export default function Page() {
                 </div>
                 <div className="flex items-center justify-center mt-8">
                     <ClerkLoaded>
-                        <SignUp path="/sing-in" />
+                        <SignUp path="/sing-up" />
                     </ClerkLoaded>
                     <ClerkLoading>
                         <Loader2 className="animate-spin text-muted-foreground" />
