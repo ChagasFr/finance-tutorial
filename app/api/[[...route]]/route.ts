@@ -1,3 +1,4 @@
+import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { handle } from "hono/vercel";
@@ -13,36 +14,18 @@ app.get("/hello", (c) => {
   });
 });
 
-app
-  .get("/hello/:test", (c) => {
-    return c.json({
-      message: "Hello Next.js!",
-    });
-  })
+app.get("/hello/:test", clerkMiddleware(), (c) => {
+  const auth = getAuth(c);
 
-  .post(
-    "/create/:postId",
-    zValidator(
-      "json",
-      z.object({
-        name: z.string(),
-        userId: z.number(),
-      })
-    ),
+  if (!auth?.userId) {
+    return c.json({ error: "Unauthorzied" });
+  }
 
-    zValidator(
-      "json",
-      z.object({
-        name: z.string(),
-        userId: z.number(),
-      })
-    ),
-    (c) => {
-      const { name, userId } = c.req.valid("json");
-
-      return c.json({});
-    }
-  );
+  return c.json({
+    message: "Hello Next.js!",
+    userId: auth.userId,
+  });
+});
 
 export const GET = handle(app);
 export const POST = handle(app);
