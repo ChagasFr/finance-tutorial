@@ -1,10 +1,18 @@
+import { Link } from "lucide-react"
+import Image from "next/image"
 
 
 const HeaderLogo = () => {
     return (
         <>
-            <main className="px-3 lg:px-14">
-            </main>
+            <Link href="/">
+                <div className="items-center hidden lg:flex">
+                    <Image src="/public/logo.svg" alt="Logo" height={28} width={28} />
+                    <p className="font-semibold text-white text-2xl ml-2.5">
+                        Finance
+                    </p>
+                </div>
+            </Link>
         </>
     )
 }
