@@ -1,5 +1,11 @@
 "use client"
 
+import { usePathname } from "next/navigation"
+
+import NavButton from "./nav-button"
+
+import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+
 const routes = [
     {
         href: "/",
@@ -24,11 +30,19 @@ const routes = [
 ]
 
 const Navigation = () => {
+    const pathname = usePathname()
+
     return (
-        <>
-            <div className="bg-gradient-to-b from-blue-700 to-blue-500 pc-4 py-8 lg:px-14 pb-36">
-            </div>
-        </>
+        <nav className="hidden lg:flex items-center gap-x-2 overflow-auto">
+            {routes.map((route) => (
+                <NavButton
+                    key={route.href}
+                    href={route.href}
+                    label={route.label}
+                    isActive={pathname === route.href}
+                />
+            ))}
+        </nav>
     )
 }
 
