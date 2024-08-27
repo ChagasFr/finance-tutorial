@@ -1,14 +1,14 @@
-const app = new Hono().get("/", async (c) => {
-  const data = await db
-    .select({
-      id: accounts.id,
-      name: accounts.name,
-    })
-    .from(accounts);
+import { useQuery } from "@tanstack/react-query";
 
-  return c.json({
-    data,
+import { client } from "@/lib/hono";
+
+export const useGetAccounts = () => {
+  const query = useQuery({
+    queryKey: ["accounts"],
+    queryFn: async () => {
+      const resposne = await client.api.accounts.$get();
+    },
   });
-});
+};
 
-export default app;
+export default useGetAccounts;
