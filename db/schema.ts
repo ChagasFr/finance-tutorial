@@ -1,6 +1,5 @@
-import accounts from "@/app/api/[[...route]]/accounts";
-import { pgTable, text } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
+import { pgTable, text } from "drizzle-orm/pg-core";
 
 export const account = pgTable("accounts", {
   id: text("id").primaryKey(),
