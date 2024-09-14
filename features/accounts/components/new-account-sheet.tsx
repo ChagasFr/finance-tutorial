@@ -1,4 +1,4 @@
-import { Sheet, SheetContent, SheetHeader } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 
 export const NewAccountSheet = () => {
     return (
@@ -6,7 +6,12 @@ export const NewAccountSheet = () => {
             <SheetContent className="space-y-4">
                 <SheetHeader>
                     <SheetHeader>
-                        New Account
+                        <SheetTitle>
+                            New Account
+                        </SheetTitle>
+                        <SheetDescription>
+                            Create a new account to track tour transactions.
+                        </SheetDescription>
                     </SheetHeader>
                 </SheetHeader>
             </SheetContent>
