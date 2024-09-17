@@ -6,6 +6,8 @@ import { insertAccountSchema } from "@/db/schema";
 import { Input } from "@/components/ui/input"
 
 import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form"
+import { Button } from "@/components/ui/button";
+import { Trash } from "lucide-react";
 
 const formSchema = insertAccountSchema.pick({
     name: true,
@@ -55,6 +57,13 @@ export const AccountForm = ({
                     </FormItem>
                 )}
                 />
+                <Button className="w-full" disabled={disabled}>
+                    {id ? "Save Changes" : "Create account"}
+                </Button>
+                <Button type="button" disabled={disabled} onClick={handleDelete}>
+                    <Trash className="size-4 mr-2" />
+                    Delete account
+                </Button>
             </form>
         </Form>
     )
