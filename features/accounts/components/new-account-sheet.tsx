@@ -1,7 +1,7 @@
-
-import { useNewAccount } from "../hooks/use-new-account"
-import { AccountForm } from "./account-form";
 import { z } from "zod";
+import { AccountForm } from "./account-form";
+import { useNewAccount } from "../hooks/use-new-account"
+
 
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { insertAccountSchema } from "@/db/schema";
@@ -15,8 +15,8 @@ type FormValues = z.input<typeof formSchema>;
 export const NewAccountSheet = () => {
     const { isOpen, onClose } = useNewAccount();
 
-    const onSubmit = (value: FormValues) => {
-
+    const onSubmit = (values: FormValues) => {
+        console.log({ values });
     }
 
     return (
@@ -31,7 +31,7 @@ export const NewAccountSheet = () => {
                             Create a new account to track tour transactions.
                         </SheetDescription>
                     </SheetHeader>
-                    <AccountForm onSubmit={() => { }} disabled={false} />
+                    <AccountForm onSubmit={onSubmit} disabled={false} defaultValues={{ name: "" }} />
                 </SheetHeader>
             </SheetContent>
         </Sheet>
