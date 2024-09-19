@@ -16,6 +16,7 @@
     "@tanstack/react-table": "^8.20.5",
     "add": "^2.0.6",
     "card": "^2.5.4",
+    "checkbox": "^0.0.1",
     "class-variance-authority": "^0.7.0",
     "dialog": "^0.3.1",
     "drizzle-zod": "^0.5.1",
