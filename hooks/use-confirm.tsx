@@ -50,5 +50,7 @@ export const useConfirm = (
                 </DialogFooter>
             </DialogContent>
         </Dialog>
-    )
+    );
+
+    return [ConfirmationDialog, confirm];
 };
