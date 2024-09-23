@@ -54,7 +54,12 @@ const app = new Hono()
           name: accounts.name,
         })
         .from(accounts)
-        .where(and(eq(accounts.userId, auth.userId)));
+        .where(and(eq(accounts.userId, auth.userId), eq(accounts.id, id)));
+
+      if (!data) {
+        return c.json({ error: "Not found" }, 404);
+      }
+      return c.json({ data });
     }
   )
 
