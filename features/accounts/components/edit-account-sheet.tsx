@@ -5,9 +5,9 @@ import { AccountForm } from "./account-form";
 
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { insertAccountSchema } from "@/db/schema";
-import { useCreateAccount } from "../api/use-create-account";
 import useGetAccount from "../api/use-get-account";
 import { Loader2 } from "lucide-react";
+import { useEditAccount } from "../api/use-edit-account";
 
 const formSchema = insertAccountSchema.pick({
     name: true,
@@ -19,12 +19,16 @@ export const EditAccountSheet = () => {
     const { isOpen, onClose, id } = useOpenAccount();
 
     const accountQuery = useGetAccount(id);
-    const mutation = useCreateAccount();
+    const editMutation = useEditAccount(id);
+
+
+    const isPending =
+        editMutation.isPending
 
     const isLoading = accountQuery.isLoading;
 
     const onSubmit = (values: FormValues) => {
-        mutation.mutate(values, {
+        editMutation.mutate(values, {
             onSuccess: () => {
                 onClose();
             },
@@ -56,7 +60,7 @@ export const EditAccountSheet = () => {
 
                             </div>
                         ) : (
-                            <AccountForm id={id} onSubmit={onSubmit} disabled={mutation.isPending} defaultValues={defaultValues} />
+                            <AccountForm id={id} onSubmit={onSubmit} disabled={isPending} defaultValues={defaultValues} />
                         )
                     }
                 </SheetHeader>
