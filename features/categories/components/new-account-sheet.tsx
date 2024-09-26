@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { AccountForm } from "./account-form";
-import { useNewAccount } from "../hooks/use-new-account"
+import { useNewAccount } from "../hooks/use-new-category"
 
 
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
