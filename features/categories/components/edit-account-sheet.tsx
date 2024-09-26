@@ -8,7 +8,7 @@ import { insertAccountSchema } from "@/db/schema";
 import useGetAccount from "../api/use-get-category";
 import { Loader2 } from "lucide-react";
 import { useEditAccount } from "../api/use-edit-category";
-import { useDeleteAccount } from "../api/use-delete-account";
+import { useDeleteAccount } from "../api/use-delete-category";
 import { useConfirm } from "@/hooks/use-confirm";
 
 const formSchema = insertAccountSchema.pick({

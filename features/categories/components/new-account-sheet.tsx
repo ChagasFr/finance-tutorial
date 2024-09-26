@@ -5,7 +5,7 @@ import { useNewAccount } from "../hooks/use-new-category"
 
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { insertAccountSchema } from "@/db/schema";
-import { useCreateAccount } from "../api/use-create-account";
+import { useCreateAccount } from "../api/use-create-category";
 
 const formSchema = insertAccountSchema.pick({
     name: true,

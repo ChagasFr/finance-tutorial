@@ -8,7 +8,7 @@ type ResponseType = InferResponseType<
   (typeof client.api.accounts)[":id"]["$delete"]
 >;
 
-export const useDeleteAccount = (id?: string) => {
+export const useDeleteCategory = (id?: string) => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation<ResponseType, Error>({
@@ -19,9 +19,9 @@ export const useDeleteAccount = (id?: string) => {
       return await response.json();
     },
     onSuccess: () => {
-      toast.success("Account deleted");
-      queryClient.invalidateQueries({ queryKey: ["account", { id }] });
-      queryClient.invalidateQueries({ queryKey: ["accounts"] });
+      toast.success("Category deleted");
+      queryClient.invalidateQueries({ queryKey: ["category", { id }] });
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
     },
     onError: () => {
       toast.error("Failed to deleted account");
