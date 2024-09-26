@@ -5,10 +5,10 @@ import { client } from "@/lib/hono";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type ResponseType = InferResponseType<
-  (typeof client.api.accounts)[":id"]["$patch"]
+  (typeof client.api.categories)[":id"]["$patch"]
 >;
 type RequestType = InferRequestType<
-  (typeof client.api.accounts)[":id"]["$patch"]
+  (typeof client.api.categories)[":id"]["$patch"]
 >["json"];
 
 export const useEditAccount = (id?: string) => {
@@ -16,19 +16,19 @@ export const useEditAccount = (id?: string) => {
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
     mutationFn: async (json) => {
-      const response = await client.api.accounts[":id"]["$patch"]({
+      const response = await client.api.categories[":id"]["$patch"]({
         param: { id },
         json,
       });
       return await response.json();
     },
     onSuccess: () => {
-      toast.success("Account updated");
+      toast.success("Category updated");
       queryClient.invalidateQueries({ queryKey: ["account", { id }] });
-      queryClient.invalidateQueries({ queryKey: ["accounts"] });
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
     },
     onError: () => {
-      toast.error("Failed to edit account");
+      toast.error("Failed to edit Category");
     },
   });
 

@@ -5,9 +5,9 @@ import { AccountForm } from "./account-form";
 
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { insertAccountSchema } from "@/db/schema";
-import useGetAccount from "../api/use-get-account";
+import useGetAccount from "../api/use-get-category";
 import { Loader2 } from "lucide-react";
-import { useEditAccount } from "../api/use-edit-account";
+import { useEditAccount } from "../api/use-edit-category";
 import { useDeleteAccount } from "../api/use-delete-account";
 import { useConfirm } from "@/hooks/use-confirm";
 
