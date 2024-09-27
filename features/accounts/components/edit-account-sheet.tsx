@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { useOpenAccount } from "../hooks/use-get-account";
+import { useOpenAccount } from "../hooks/use-open-account";
 import { AccountForm } from "./account-form";
 
 
@@ -22,7 +22,7 @@ export const EditAccountSheet = () => {
 
     const [ConfirmDialog, confirm] = useConfirm(
         "Are you sure?",
-        "You are about to delete this Transaction"
+        "You are about to delete this account."
     )
 
     const accountQuery = useGetAccount(id);
