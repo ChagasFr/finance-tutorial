@@ -2,30 +2,60 @@ import { Hono } from "hono";
 import { and, eq, inArray } from "drizzle-orm";
 import { zValidator } from "@hono/zod-validator";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
+import { subDays, parse } from "date-fns";
 
 import { db } from "@/db/drizzle";
-import { categories, insertCategorySchema } from "@/db/schema";
+import { transactions, insertTransactionSchema, accounts } from "@/db/schema";
 import { createId } from "@paralleldrive/cuid2";
 import { z } from "zod";
 
 const app = new Hono()
-  .get("/", clerkMiddleware(), async (c) => {
-    const auth = getAuth(c);
-
-    if (!auth?.userId) {
-      return c.json({ error: "unauthorized" }, 401);
-    }
-
-    const data = await db
-      .select({
-        id: categories.id,
-        name: categories.name,
+  .get(
+    "/",
+    zValidator(
+      "query",
+      z.object({
+        from: z.string().optional(),
+        to: z.string().optional(),
+        accountId: z.string().optional(),
       })
-      .from(categories)
-      .where(eq(categories.userId, auth.userId));
+    ),
+    clerkMiddleware(),
+    async (c) => {
+      const auth = getAuth(c);
+      const { from, to, accountId } = c.req.valid("query");
 
-    return c.json({ data });
-  })
+      if (!auth?.userId) {
+        return c.json({ error: "unauthorized" }, 401);
+      }
+
+      const defaultTo = new Date();
+      const defaultFrom = subDays(defaultTo, 30);
+
+      const startDate = from
+        ? parse(from, "yyyy-MM-dd", new Date())
+        : defaultFrom;
+
+      const endDate = to ? parse(to, "yyyy-MM-dd", new Date()) : defaultFrom;
+
+      const data = await db
+        .select({
+          id: transactions.id,
+          categoryId: transactions.categoryId,
+          caregoryId: transactions.categoryId,
+          payee: transactions.payee,
+          amount: transactions.amount,
+          notes: transactions.notes,
+          account: accounts.name,
+          accountId: transactions.accountId,
+        })
+        .from(transactions)
+        .innerJoin(accounts, eq(transactions.accountId, accounts.id))
+        .where(eq(transactions.userId, auth.userId));
+
+      return c.json({ data });
+    }
+  )
   .get(
     "/:id",
     zValidator(
@@ -49,11 +79,13 @@ const app = new Hono()
 
       const [data] = await db
         .select({
-          id: categories.id,
-          name: categories.name,
+          id: transactions.id,
+          name: transactions.name,
         })
-        .from(categories)
-        .where(and(eq(categories.userId, auth.userId), eq(categories.id, id)));
+        .from(transactions)
+        .where(
+          and(eq(transactions.userId, auth.userId), eq(transactions.id, id))
+        );
 
       if (!data) {
         return c.json({ error: "Not found" }, 404);
@@ -66,7 +98,7 @@ const app = new Hono()
     clerkMiddleware(),
     zValidator(
       "json",
-      insertCategorySchema.pick({
+      insertTransactionSchema.pick({
         name: true,
       })
     ),
@@ -79,7 +111,7 @@ const app = new Hono()
       }
 
       const [data] = await db
-        .insert(categories)
+        .insert(transactions)
         .values({
           id: createId(),
           userId: auth.userId,
@@ -103,15 +135,15 @@ const app = new Hono()
       }
 
       const data = await db
-        .delete(categories)
+        .delete(transactions)
         .where(
           and(
-            eq(categories.userId, auth.userId),
-            inArray(categories.id, values.ids)
+            eq(transactions.userId, auth.userId),
+            inArray(transactions.id, values.ids)
           )
         )
         .returning({
-          id: categories.id,
+          id: transactions.id,
         });
 
       return c.json({ data });
@@ -123,7 +155,7 @@ const app = new Hono()
     zValidator("param", z.object({ id: z.string().optional() })),
     zValidator(
       "json",
-      insertCategorySchema.pick({
+      insertTransactionSchema.pick({
         name: true,
       })
     ),
@@ -141,9 +173,11 @@ const app = new Hono()
       }
 
       const [data] = await db
-        .update(categories)
+        .update(transactions)
         .set(values)
-        .where(and(eq(categories.userId, auth.userId), eq(categories.id, id)))
+        .where(
+          and(eq(transactions.userId, auth.userId), eq(transactions.id, id))
+        )
         .returning();
 
       if (!data) {
@@ -170,10 +204,12 @@ const app = new Hono()
       }
 
       const [data] = await db
-        .delete(categories)
-        .where(and(eq(categories.userId, auth.userId), eq(categories.id, id)))
+        .delete(transactions)
+        .where(
+          and(eq(transactions.userId, auth.userId), eq(transactions.id, id))
+        )
         .returning({
-          id: categories.id,
+          id: transactions.id,
         });
 
       if (!data) {
