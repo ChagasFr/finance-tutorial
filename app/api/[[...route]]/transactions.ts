@@ -1,11 +1,16 @@
 import { Hono } from "hono";
-import { and, eq, inArray } from "drizzle-orm";
+import { and, eq, gte, desc, inArray, lte } from "drizzle-orm";
 import { zValidator } from "@hono/zod-validator";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { subDays, parse } from "date-fns";
 
 import { db } from "@/db/drizzle";
-import { transactions, insertTransactionSchema, accounts } from "@/db/schema";
+import {
+  transactions,
+  insertTransactionSchema,
+  accounts,
+  categories,
+} from "@/db/schema";
 import { createId } from "@paralleldrive/cuid2";
 import { z } from "zod";
 
@@ -41,6 +46,7 @@ const app = new Hono()
       const data = await db
         .select({
           id: transactions.id,
+          date: transactions.date,
           categoryId: transactions.categoryId,
           caregoryId: transactions.categoryId,
           payee: transactions.payee,
@@ -51,7 +57,16 @@ const app = new Hono()
         })
         .from(transactions)
         .innerJoin(accounts, eq(transactions.accountId, accounts.id))
-        .where(eq(transactions.userId, auth.userId));
+        .leftJoin(categories, eq(transactions.categoryId, categories.id))
+        .where(
+          and(
+            accountId ? eq(transactions.accountId, accountId) : undefined,
+            eq(accounts.userId, auth.userId),
+            gte(transactions.date, startDate),
+            lte(transactions.date, endDate)
+          )
+        )
+        .orderBy(desc(transactions.date));
 
       return c.json({ data });
     }
@@ -80,12 +95,17 @@ const app = new Hono()
       const [data] = await db
         .select({
           id: transactions.id,
-          name: transactions.name,
+          date: transactions.date,
+          categoryId: transactions.categoryId,
+          caregoryId: transactions.categoryId,
+          payee: transactions.payee,
+          amount: transactions.amount,
+          notes: transactions.notes,
+          accountId: transactions.accountId,
         })
         .from(transactions)
-        .where(
-          and(eq(transactions.userId, auth.userId), eq(transactions.id, id))
-        );
+        .innerJoin(accounts, eq(transactions.accountId, accounts.id))
+        .where(and(eq(transactions.userId, auth.userId), eq(accounts.id, id)));
 
       if (!data) {
         return c.json({ error: "Not found" }, 404);
@@ -98,8 +118,8 @@ const app = new Hono()
     clerkMiddleware(),
     zValidator(
       "json",
-      insertTransactionSchema.pick({
-        name: true,
+      insertTransactionSchema.omit({
+        id: true,
       })
     ),
     async (c) => {
@@ -114,7 +134,6 @@ const app = new Hono()
         .insert(transactions)
         .values({
           id: createId(),
-          userId: auth.userId,
           ...values,
         })
         .returning();
