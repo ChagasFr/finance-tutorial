@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { and, eq, gte, desc, inArray, lte } from "drizzle-orm";
+import { and, eq, gte, desc, inArray, lte, sql } from "drizzle-orm";
 import { zValidator } from "@hono/zod-validator";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { subDays, parse } from "date-fns";
@@ -153,17 +153,30 @@ const app = new Hono()
         return c.json({ error: "Unauthorized" }, 401);
       }
 
+      const transactionsToDelete = db.$with("transaction_to_delete").as(
+        db
+          .select({ id: transactions.id })
+          .from(transactions)
+          .innerJoin(accounts, eq(transactions.accountId, accounts.id))
+          .where(
+            and(
+              inArray(transactions.id, values.ids),
+              eq(accounts.userId, auth.userId)
+            )
+          )
+      );
+
       const data = await db
+        .with(transactionsToDelete)
         .delete(transactions)
         .where(
-          and(
-            eq(transactions.userId, auth.userId),
-            inArray(transactions.id, values.ids)
-          )
-        )
-        .returning({
-          id: transactions.id,
-        });
+          inArray(
+            transactions.id,
+            sql`(select id from ${transactionsToDelete})`
+          ).returning({
+            id: transactions.id,
+          })
+        );
 
       return c.json({ data });
     }
@@ -174,8 +187,8 @@ const app = new Hono()
     zValidator("param", z.object({ id: z.string().optional() })),
     zValidator(
       "json",
-      insertTransactionSchema.pick({
-        name: true,
+      insertTransactionSchema.omit({
+        id: true,
       })
     ),
     async (c) => {
@@ -191,13 +204,24 @@ const app = new Hono()
         return c.json({ error: "Unauthorized" }, 401);
       }
 
+      const transactionsToUpdate = db.$with("transaction_to_update").as(
+        db
+          .select({ id: transactions.id })
+          .from(transactions)
+          .innerJoin(accounts, eq(transactions.accountId, accounts.id))
+          .where(and(eq(transactions.id, id), eq(accounts.userId, auth.userId)))
+      );
+
       const [data] = await db
+        .with(transactionsToUpdate)
         .update(transactions)
         .set(values)
         .where(
-          and(eq(transactions.userId, auth.userId), eq(transactions.id, id))
-        )
-        .returning();
+          inArray(
+            transactions.id,
+            sql`(select id from ${transactionsToUpdate})`
+          ).returning()
+        );
 
       if (!data) {
         return c.json({ error: "Not Found" }, 404);
@@ -222,15 +246,23 @@ const app = new Hono()
         return c.json({ error: "Unauthorized" }, 401);
       }
 
+      const transactionsToDelete = db.$with("transaction_to_delete").as(
+        db
+          .select({ id: transactions.id })
+          .from(transactions)
+          .innerJoin(accounts, eq(transactions.accountId, accounts.id))
+          .where(and(eq(transactions.id, id), eq(accounts.userId, auth.userId)))
+      );
+
       const [data] = await db
+        .with(transactionsToDelete)
         .delete(transactions)
         .where(
-          and(eq(transactions.userId, auth.userId), eq(transactions.id, id))
-        )
-        .returning({
-          id: transactions.id,
-        });
-
+          inArray(
+            transactions.id,
+            sql`(select id from ${transactionsToDelete})`
+          )
+        );
       if (!data) {
         return c.json({ error: "Not Found" }, 404);
       }
