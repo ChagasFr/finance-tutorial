@@ -7,7 +7,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "
 import { insertAccountSchema } from "@/db/schema";
 import useGetAccount from "../api/use-get-transaction";
 import { Loader2 } from "lucide-react";
-import { useEditAccount } from "../api/use-edit-account";
+import { useEditAccount } from "../api/use-edit-transaction";
 import { useDeleteAccount } from "../api/use-delete-account";
 import { useConfirm } from "@/hooks/use-confirm";
 
