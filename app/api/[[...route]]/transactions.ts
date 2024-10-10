@@ -142,6 +142,22 @@ const app = new Hono()
     }
   )
   .post(
+    "/bulk-create",
+    clerkMiddleware(),
+    zValidator(
+      "json",
+      z.array(
+        insertTransactionSchema.omit({
+          id: true;
+        })
+      )
+    ),
+    async (c) => {
+      const auth = getAuth(c);
+      const values = c.req.valid("json");
+    }
+  )
+  .post(
     "/bulk-delete",
     clerkMiddleware(),
     zValidator("json", z.object({ ids: z.array(z.string()) })),
