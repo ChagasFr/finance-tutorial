@@ -155,6 +155,20 @@ const app = new Hono()
     async (c) => {
       const auth = getAuth(c);
       const values = c.req.valid("json");
+
+      if (!auth?.userId) {
+        return c.json ({error: "Unauthorized"}, 401);
+      }
+
+      const data = await db
+        .insert(transactions)
+        .values(
+          values.map((value) => ({
+            id: createId(),
+            ...value
+          }))
+        )
+        .returning();
     }
   )
   .post(
