@@ -1,11 +1,11 @@
 import { z } from "zod";
 import { AccountForm } from "./account-form";
-import { useNewAccount } from "../hooks/use-new-account"
+import { useNewAccount } from "../hooks/use-new-transaction"
 
 
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { insertAccountSchema } from "@/db/schema";
-import { useCreateAccount } from "../api/use-create-transaction";
+import { useCreateAccount } from "@/features/accounts/api/use-create-account";
 
 const formSchema = insertAccountSchema.pick({
     name: true,
