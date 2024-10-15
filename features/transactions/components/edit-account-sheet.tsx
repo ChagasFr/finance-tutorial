@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { useOpenAccount } from "../hooks/use-open-transaction";
-import { AccountForm } from "./account-form";
+import { AccountForm } from "./transaction-form";
 
 
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
