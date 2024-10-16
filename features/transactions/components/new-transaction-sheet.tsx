@@ -8,9 +8,16 @@ import { useCreateCategory } from "@/features/categories/api/use-create-category
 import useGetCaregory from "@/features/categories/api/use-get-category";
 import useGetAccounts from "@/features/accounts/api/use-get-accounts";
 import { useCreateAccount } from "@/features/accounts/api/use-create-account";
+import { TransactionForm } from "./transaction-form";
+import { Loader2 } from "lucide-react";
 
-const formSchema = insertTransactionSchema.omit({
-    id: true,
+const formSchema = z.object({
+    date: z.coerce.date(),
+    accountId: z.string(),
+    categoryId: z.string().nullable().optional(),
+    payee: z.string(),
+    amount: z.string(),
+    note: z.string().nullable().optional(),
 });
 
 type FormValues = z.input<typeof formSchema>;
@@ -18,7 +25,7 @@ type FormValues = z.input<typeof formSchema>;
 export const NewTransactionSheet = () => {
     const { isOpen, onClose } = useNewTransaction();
 
-    const mutation = useCreateTransaction();
+    const createMutation = useCreateTransaction();
 
     const categoryQuery = useGetCaregory();
     const categoryMutation = useCreateCategory();
@@ -38,10 +45,19 @@ export const NewTransactionSheet = () => {
     const accountOptions = (accountQuery.data ?? []).map((account) => ({
         label: account.name,
         value: account.id,
-    }))
+    }));
+
+    const isPending =
+        createMutation.isPending ||
+        categoryMutation.isPending ||
+        accountMutation.isPending;
+
+    const isLoading =
+        categoryQuery.isLoading ||
+        accountQuery.isLoading;
 
     const onSubmit = (values: FormValues) => {
-        mutation.mutate(values, {
+        createMutation.mutate(values, {
             onSuccess: () => {
                 onClose();
             },
@@ -60,7 +76,23 @@ export const NewTransactionSheet = () => {
                             Add a new transaction
                         </SheetDescription>
                     </SheetHeader>
-                    <p>TODO: Transaction Form</p>
+                    {isLoading
+                        ? (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <Loader2 className="size-4 text-muted-foreground animate-spin" />
+                            </div>
+                        )
+                        : (
+                            <TransactionForm
+                                onSubmit={onSubmit}
+                                disabled={isPending}
+                                categoryOptions={categoryOptions}
+                                onCreateCategory={onCreateCategory}
+                                accountOptions={accountOptions}
+                                onCreateAccount={onCreateAccount}
+                            />
+                        )
+                    }
                 </SheetHeader>
             </SheetContent>
         </Sheet>
