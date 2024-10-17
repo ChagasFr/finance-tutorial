@@ -17,7 +17,7 @@ const formSchema = z.object({
     categoryId: z.string().nullable().optional(),
     payee: z.string(),
     amount: z.string(),
-    note: z.string().nullable().optional(),
+    notes: z.string().nullable().optional(),
 });
 
 type FormValues = z.input<typeof formSchema>;
