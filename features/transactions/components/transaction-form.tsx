@@ -42,7 +42,11 @@ export const TransactionForm = ({
     defaultValues,
     onSubmit,
     onDelete,
-    disabled
+    disabled,
+    accountOptions,
+    categoryOptions,
+    onCreateAccount,
+    onCreateCategory
 }: Props) => {
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
