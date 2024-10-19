@@ -30,7 +30,7 @@ export const Select = ({
 
     const formattedValue = useMemo(() => {
         return options.find((option) => option.value === value)
-    })
+    }, [options, value]);
 
     return (
         <CreateableSelect />
