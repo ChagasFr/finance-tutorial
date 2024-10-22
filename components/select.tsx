@@ -33,6 +33,18 @@ export const Select = ({
     }, [options, value]);
 
     return (
-        <CreateableSelect />
+        <CreateableSelect
+            placeholder={placeholder}
+            className="text-sm h-10"
+            styles={{
+                control: (base) => ({
+                    ...base,
+                    borderColor: "e2e8f0",
+                    ":hover": {
+                        borderColor: "e2e8f0"
+                    }
+                })
+            }}
+        />
     )
 }
