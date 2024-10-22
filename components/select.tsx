@@ -45,6 +45,11 @@ export const Select = ({
                     }
                 })
             }}
+            value={formattedValue}
+            onChange={onSelect}
+            options={options}
+            onCreateOption={onCreate}
+            isDisabled={disabled}
         />
     )
 }
