@@ -19,9 +19,15 @@ export const DatePicker = ({
     onChange,
     disabled,
 }: Props) => {
-    <Popover>
-        <PopoverTrigger asChild>
-            <Button disabled={disabled} variant="outline" className="" />
-        </PopoverTrigger>
-    </Popover>
+    return (
+        <Popover>
+            <PopoverTrigger asChild>
+                <Button disabled={disabled} variant="outline" className={cn("w-full justify-start text-left font-normal", !value && "text-muted-foreground",)}>
+                </Button>
+            </PopoverTrigger>
+            <PopoverContent>
+                <Calendar mode="single" selected={value} onSelected={onChange} disabled={disabled} initialFocus />
+            </PopoverContent>
+        </Popover>
+    )
 }
