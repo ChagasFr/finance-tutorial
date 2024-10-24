@@ -69,7 +69,7 @@ export const TransactionForm = ({
                 <FormField name="date" control={form.control} render={({ field }) => (
                     <FormItem>
                         <FormControl>
-                            <Select placeholder="Select an account" options={accountOptions} onCreate={onCreateAccount} value={field.value} onChange={field.onChange} disabled={disabled} />
+                            <DatePicker />
                         </FormControl>
                     </FormItem>
                 )}
