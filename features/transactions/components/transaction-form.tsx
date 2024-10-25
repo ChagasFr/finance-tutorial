@@ -100,6 +100,18 @@ export const TransactionForm = ({
                 )}
                 />
 
+                <FormField name="payee" control={form.control} render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>
+                            Payee
+                        </FormLabel>
+                        <FormControl>
+                            <Input disabled={disabled} placeholder="add a payee" {...field} />
+                        </FormControl>
+                    </FormItem>
+                )}
+                />
+
                 <Button className="w-full" disabled={disabled}>
                     {id ? "Save Changes" : "Create account"}
                 </Button>
