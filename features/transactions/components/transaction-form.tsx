@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
 import { DatePicker } from "@/components/date-picker";
 import { Select } from "@/components/select";
+import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
     date: z.coerce.date(),
@@ -107,6 +108,18 @@ export const TransactionForm = ({
                         </FormLabel>
                         <FormControl>
                             <Input disabled={disabled} placeholder="add a payee" {...field} />
+                        </FormControl>
+                    </FormItem>
+                )}
+                />
+
+                <FormField name="notes" control={form.control} render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>
+                            Notes
+                        </FormLabel>
+                        <FormControl>
+                            <Textarea {...field} value={field.value ?? ""} disabled={disabled} placeholder="Optional notes" />
                         </FormControl>
                     </FormItem>
                 )}
