@@ -1,16 +1,17 @@
 import { z } from "zod";
+import { Trash } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { insertAccountSchema, insertTransactionSchema } from "@/db/schema";
+import { Select } from "@/components/select";
 import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { DatePicker } from "@/components/date-picker";
+import { insertTransactionSchema } from "@/db/schema";
+import { AmountInput } from "@/components/amount-input";
 
 import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form"
-import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
-import { DatePicker } from "@/components/date-picker";
-import { Select } from "@/components/select";
-import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
     date: z.coerce.date(),
@@ -120,6 +121,18 @@ export const TransactionForm = ({
                         </FormLabel>
                         <FormControl>
                             <Textarea {...field} value={field.value ?? ""} disabled={disabled} placeholder="Optional notes" />
+                        </FormControl>
+                    </FormItem>
+                )}
+                />
+
+                <FormField name="amount" control={form.control} render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>
+                            Amount
+                        </FormLabel>
+                        <FormControl>
+                            <AmountInput {...field} value={field.value ?? ""} disabled={disabled} placeholder="Optional amount" />
                         </FormControl>
                     </FormItem>
                 )}
