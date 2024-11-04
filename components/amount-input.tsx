@@ -31,8 +31,18 @@ export const AmountInput = ({
     };
 
     return (
-        <div>
-            Hello
+        <div className="relative">
+            <TooltipProvider>
+                <Tooltip delayDuration={100}>
+                    <TooltipTrigger asChild>
+                        <button type="button" onClick={onReverseValue} className={cn("bg-slate-400 hover:bg-slate-500 absolute top-1.5 rounded-md p-2 flex items-center justify-center transition")}>
+                            {!parsedValue && <Info className="size-3 text-white" />}
+                            {!parsedValue && <PlusCircle className="size-3 text-white" />}
+                            {!parsedValue && <MinusCircle className="size-3 text-white" />}
+                        </button>
+                    </TooltipTrigger>
+                </Tooltip>
+            </TooltipProvider>
         </div>
     )
 }
