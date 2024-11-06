@@ -12,6 +12,7 @@ import { insertTransactionSchema } from "@/db/schema";
 import { AmountInput } from "@/components/amount-input";
 
 import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form"
+import { convertAmountToMiliunits } from "@/lib/utils";
 
 const formSchema = z.object({
     date: z.coerce.date(),
@@ -58,7 +59,11 @@ export const TransactionForm = ({
     });
 
     const handleSubmit = (values: FormValues) => {
-        onSubmit(values);
+        const amount = parseFloat(values.amount);
+        const amountInMiliunits = convertAmountToMiliunits(amount)
+
+        console.log({ values });
+        // onSubmit(values);
     };
 
     const handleDelete = () => {
