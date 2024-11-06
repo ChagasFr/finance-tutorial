@@ -36,7 +36,7 @@ export const AmountInput = ({
             <TooltipProvider>
                 <Tooltip delayDuration={100}>
                     <TooltipTrigger asChild>
-                        <button type="button" onClick={onReverseValue} className={cn("bg-slate-400 hover:bg-slate-500 absolute top-1.5 rounded-md p-2 flex items-center justify-center transition")}>
+                        <button type="button" onClick={onReverseValue} className={cn("bg-slate-400 hover:bg-slate-500 absolute top-1.5 rounded-md p-2 flex items-center justify-center transition", isIncome && "bg-emerald-500 hover:bg-emerald-600", isExpense && "bg-rose-500 hover:bg-rose-600")}>
                             {!parsedValue && <Info className="size-3 text-white" />}
                             {isIncome && <PlusCircle className="size-3 text-white" />}
                             {isExpense && <MinusCircle className="size-3 text-white" />}
@@ -56,6 +56,10 @@ export const AmountInput = ({
                 onValueChange={onChange}
                 disabled={disabled}
             />
+            <p>
+                {isIncome && "This will count as income"}
+                {isExpense && "This will count as an expense"}
+            </p>
         </div>
     )
 }
