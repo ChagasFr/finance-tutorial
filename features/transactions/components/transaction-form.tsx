@@ -62,8 +62,10 @@ export const TransactionForm = ({
         const amount = parseFloat(values.amount);
         const amountInMiliunits = convertAmountToMiliunits(amount)
 
-        console.log({ values });
-        // onSubmit(values);
+        onSubmit({
+            ...values,
+            amount: amountInMiliunits,
+        });
     };
 
     const handleDelete = () => {
@@ -144,11 +146,11 @@ export const TransactionForm = ({
                 />
 
                 <Button className="w-full" disabled={disabled}>
-                    {id ? "Save Changes" : "Create account"}
+                    {id ? "Save Changes" : "Create transactions"}
                 </Button>
                 {!!id && (<Button type="button" disabled={disabled} onClick={handleDelete} className="w-full" variant="outline">
                     <Trash className="size-4 mr-2" />
-                    Delete account
+                    Delete transactions
                 </Button>)}
             </form>
         </Form>
