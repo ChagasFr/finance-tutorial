@@ -148,7 +148,7 @@ const app = new Hono()
       "json",
       z.array(
         insertTransactionSchema.omit({
-          id: true;
+          id: true,
         })
       )
     ),
@@ -157,7 +157,7 @@ const app = new Hono()
       const values = c.req.valid("json");
 
       if (!auth?.userId) {
-        return c.json ({error: "Unauthorized"}, 401);
+        return c.json({ error: "Unauthorized" }, 401);
       }
 
       const data = await db
@@ -165,12 +165,12 @@ const app = new Hono()
         .values(
           values.map((value) => ({
             id: createId(),
-            ...value
+            ...value,
           }))
         )
         .returning();
 
-      return c.json({data});
+      return c.json({ data });
     }
   )
   .post(
