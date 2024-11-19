@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { useOpenAccount } from "../hooks/use-open-account";
+import { useOpenAccount } from "../hooks/use-open-transaction";
 import { AccountForm } from "./account-form";
 
 
