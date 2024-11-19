@@ -1,17 +1,17 @@
 import { z } from "zod";
-import { AccountForm } from "./transaction-form";
+import { TransactionForm } from "./transaction-form";
 import { useEditTransactions } from "../api/use-edit-transaction";
 
 
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
-import { insertAccountSchema } from "@/db/schema";
+import { insertTransactionSchema } from "@/db/schema";
 import { useGetTransaction } from "../api/use-get-transaction";
 import { Loader2 } from "lucide-react";
 import { useConfirm } from "@/hooks/use-confirm";
 import { useOpenTransaction } from "@/features/accounts/hooks/use-open-transaction";
 import { useDeleteTransaction } from "../api/use-delete-transaction";
 
-const formSchema = insertAccountSchema.pick({
+const formSchema = insertTransactionSchema.omit({
     name: true,
 });
 
@@ -79,10 +79,10 @@ export const EditTransactionSheet = () => {
                     <SheetHeader>
                         <SheetHeader>
                             <SheetTitle>
-                                Edit Account
+                                Edit Transaction
                             </SheetTitle>
                             <SheetDescription>
-                                Edit an existing account
+                                Edit an existing transaction
                             </SheetDescription>
                         </SheetHeader>
                         {isLoading
@@ -92,7 +92,7 @@ export const EditTransactionSheet = () => {
 
                                 </div>
                             ) : (
-                                <AccountForm id={id} onSubmit={onSubmit} disabled={isPending} defaultValues={defaultValues} onDelete={onDelete} />
+                                <TransactionForm id={id} onSubmit={onSubmit} disabled={isPending} defaultValues={defaultValues} onDelete={onDelete} />
                             )
                         }
                     </SheetHeader>
