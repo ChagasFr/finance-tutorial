@@ -22,10 +22,10 @@ export const EditTransactionSheet = () => {
 
     const [ConfirmDialog, confirm] = useConfirm(
         "Are you sure?",
-        "You are about to delete this account."
+        "You are about to delete this transaction."
     )
 
-    const accountQuery = useGetTransaction(id);
+    const transactionQuery = useGetTransaction(id);
     const editMutation = useEditTransactions(id);
     const deleteMutation = useDeleteTransaction(id);
 
@@ -34,7 +34,7 @@ export const EditTransactionSheet = () => {
         editMutation.isPending ||
         deleteMutation.isPending
 
-    const isLoading = accountQuery.isLoading;
+    const isLoading = transactionQuery.isLoading;
 
     const onSubmit = (values: FormValues) => {
         editMutation.mutate(values, {
@@ -56,10 +56,17 @@ export const EditTransactionSheet = () => {
         }
     }
 
-    const defaultValues = accountQuery.data ? {
-        name: accountQuery.data.name
+    const defaultValues = transactionQuery.data ? {
+        accountId: transactionQuery.data.accountId,
+        categoryId: transactionQuery.data.categoryId,
+        amount: transactionQuery.data.amount.toString(),
+        date: transactionQuery.data.date ? new Date(transactionQuery.data.date) : new Date(),
+        payee: transactionQuery.data.payee,
+        notes: transactionQuery.data.notes,
     } : {
-        name: "",
+        accountId: "",
+        categoryId: "",
+        amount: "",
     };
 
     return (
