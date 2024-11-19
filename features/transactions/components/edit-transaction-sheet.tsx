@@ -67,6 +67,8 @@ export const EditTransactionSheet = () => {
         accountId: "",
         categoryId: "",
         amount: "",
+        payee: "",
+        notes: "",
     };
 
     return (
