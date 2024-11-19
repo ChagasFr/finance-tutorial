@@ -23,7 +23,27 @@ export const EditTransactionSheet = () => {
     const [ConfirmDialog, confirm] = useConfirm(
         "Are you sure?",
         "You are about to delete this transaction."
-    )
+    );
+
+    const categoryQuery = useGetCaregory();
+    const categoryMutation = useCreateCategory();
+    const onCreateCategory = (name: string) => categoryMutation.mutate({
+        name
+    });
+    const categoryOptions = (categoryQuery.data ?? []).map((category) => ({
+        label: category.name,
+        value: category.id,
+    }));
+
+    const accountQuery = useGetAccounts();
+    const accountMutation = useCreateAccount();
+    const onCreateAccount = (name: string) => accountMutation.mutate({
+        name
+    });
+    const accountOptions = (accountQuery.data ?? []).map((account) => ({
+        label: account.name,
+        value: account.id,
+    }));
 
     const transactionQuery = useGetTransaction(id);
     const editMutation = useEditTransactions(id);
