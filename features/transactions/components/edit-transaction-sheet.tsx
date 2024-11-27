@@ -2,7 +2,6 @@ import { z } from "zod";
 import { TransactionForm } from "./transaction-form";
 import { useEditTransactions } from "../api/use-edit-transaction";
 
-
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { insertTransactionSchema } from "@/db/schema";
 import { useGetTransaction } from "../api/use-get-transaction";
@@ -10,6 +9,11 @@ import { Loader2 } from "lucide-react";
 import { useConfirm } from "@/hooks/use-confirm";
 import { useOpenTransaction } from "@/features/accounts/hooks/use-open-transaction";
 import { useDeleteTransaction } from "../api/use-delete-transaction";
+
+import useGetCaregory from "@/features/categories/api/use-get-category";
+import useGetAccounts from "@/features/accounts/api/use-get-accounts";
+import { useCreateAccount } from "@/features/accounts/api/use-create-account";
+import { useCreateCategory } from "@/features/categories/api/use-create-category";
 
 const formSchema = insertTransactionSchema.omit({
     name: true,
@@ -23,7 +27,27 @@ export const EditTransactionSheet = () => {
     const [ConfirmDialog, confirm] = useConfirm(
         "Are you sure?",
         "You are about to delete this transaction."
-    )
+    );
+
+    const categoryQuery = useGetCaregory();
+    const categoryMutation = useCreateCategory();
+    const onCreateCategory = (name: string) => categoryMutation.mutate({
+        name
+    });
+    const categoryOptions = (categoryQuery.data ?? []).map((category) => ({
+        label: category.name,
+        value: category.id,
+    }));
+
+    const accountQuery = useGetAccounts();
+    const accountMutation = useCreateAccount();
+    const onCreateAccount = (name: string) => accountMutation.mutate({
+        name
+    });
+    const accountOptions = (accountQuery.data ?? []).map((account) => ({
+        label: account.name,
+        value: account.id,
+    }));
 
     const transactionQuery = useGetTransaction(id);
     const editMutation = useEditTransactions(id);
@@ -32,7 +56,10 @@ export const EditTransactionSheet = () => {
 
     const isPending =
         editMutation.isPending ||
-        deleteMutation.isPending
+        deleteMutation.isPending ||
+        transactionQuery.isLoading ||
+        categoryMutation.isPending ||
+        accountMutation.isPending;
 
     const isLoading = transactionQuery.isLoading;
 
