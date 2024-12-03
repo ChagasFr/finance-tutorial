@@ -97,6 +97,7 @@ export const EditTransactionSheet = () => {
         accountId: "",
         categoryId: "",
         amount: "",
+        date: new Date(),
         payee: "",
         notes: "",
     };
@@ -126,6 +127,7 @@ export const EditTransactionSheet = () => {
                                     id={id}
                                     defaultValues={defaultValues}
                                     onSubmit={onSubmit}
+                                    onDelete={onDelete}
                                     disabled={isPending}
                                     categoryOptions={categoryOptions}
                                     onCreateCategory={onCreateCategory}
