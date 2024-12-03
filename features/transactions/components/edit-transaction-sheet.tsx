@@ -16,7 +16,7 @@ import { useCreateAccount } from "@/features/accounts/api/use-create-account";
 import { useCreateCategory } from "@/features/categories/api/use-create-category";
 
 const formSchema = insertTransactionSchema.omit({
-    name: true,
+    id: true,
 });
 
 type FormValues = z.input<typeof formSchema>;
@@ -61,7 +61,10 @@ export const EditTransactionSheet = () => {
         categoryMutation.isPending ||
         accountMutation.isPending;
 
-    const isLoading = transactionQuery.isLoading;
+    const isLoading =
+        transactionQuery.isLoading ||
+        categoryQuery.isLoading ||
+        accountQuery.isLoading;
 
     const onSubmit = (values: FormValues) => {
         editMutation.mutate(values, {
@@ -119,7 +122,16 @@ export const EditTransactionSheet = () => {
 
                                 </div>
                             ) : (
-                                <TransactionForm id={id} onSubmit={onSubmit} disabled={isPending} defaultValues={defaultValues} onDelete={onDelete} />
+                                <TransactionForm
+                                    id={id}
+                                    defaultValues={defaultValues}
+                                    onSubmit={onSubmit}
+                                    disabled={isPending}
+                                    categoryOptions={categoryOptions}
+                                    onCreateCategory={onCreateCategory}
+                                    accountOptions={accountOptions}
+                                    onCreateAccount={onCreateAccount}
+                                />
                             )
                         }
                     </SheetHeader>
