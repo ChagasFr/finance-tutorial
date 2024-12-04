@@ -10,8 +10,22 @@ import { columns } from "./columns";
 import { DataTable } from "@/components/data-table";
 import { useBulkDeleteTransactions } from "@/features/transactions/api/use-bulk-delete-transactions";
 import useGetTransactions from "@/features/transactions/api/use-get-transactions";
+import { useState } from "react";
+
+enum VARIANTS {
+    LIST = "LIST",
+    IMPORT = "IMPORT"
+};
+
+const INITIAL_IMPORT_RESULTS = {
+    data: [],
+    errors: [],
+    meta: {},
+};
 
 const TransactionsPage = () => {
+    const [variant, setVariant] = useState<VARIANTS>(VARIANTS.LIST);
+
     const newTransaction = useNewTransaction();
     const deleteTransactions = useBulkDeleteTransactions();
     const transactionsQuery = useGetTransactions();
@@ -50,7 +64,7 @@ const TransactionsPage = () => {
                 </CardHeader>
                 <CardContent>
                     <DataTable
-                        filterKey="name"
+                        filterKey="payee"
                         columns={columns}
                         data={transactions}
                         onDelete={(row) => {
