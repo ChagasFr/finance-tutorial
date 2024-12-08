@@ -12,6 +12,7 @@ import { useBulkDeleteTransactions } from "@/features/transactions/api/use-bulk-
 import useGetTransactions from "@/features/transactions/api/use-get-transactions";
 import { useState } from "react";
 import { UploadButton } from "./upload-button";
+import { ImportCard } from "./import-card";
 
 enum VARIANTS {
     LIST = "LIST",
@@ -66,7 +67,7 @@ const TransactionsPage = () => {
     if (variant === VARIANTS.IMPORT) {
         return (
             <>
-                <ImportCard />
+                <ImportCard data={importResults.data} onCancel={onCancelImport} onSubmit={() => { }} />
             </>
         )
     }
