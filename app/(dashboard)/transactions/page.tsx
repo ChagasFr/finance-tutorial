@@ -30,8 +30,14 @@ const TransactionsPage = () => {
         (INITIAL_IMPORT_RESULTS)
 
     const onUpload = (results: typeof INITIAL_IMPORT_RESULTS) => {
+        setImportResults(results);
         setVariant(VARIANTS.IMPORT);
     }
+
+    const onCancelImport = () => {
+        setImportResults(INITIAL_IMPORT_RESULTS);
+        setVariant(VARIANTS.LIST);
+    };
 
     const newTransaction = useNewTransaction();
     const deleteTransactions = useBulkDeleteTransactions();
@@ -60,9 +66,7 @@ const TransactionsPage = () => {
     if (variant === VARIANTS.IMPORT) {
         return (
             <>
-                <div>
-                    This is a screen for import
-                </div>
+                <ImportCard />
             </>
         )
     }
