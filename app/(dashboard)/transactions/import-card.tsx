@@ -33,11 +33,9 @@ export const ImportCard = ({
                         Transactions History
                     </CardTitle>
                     <div className="flex items-center gap-x-2">
-                        <Button onClick={newTransaction.onOpen} size="sm">
-                            <Plus className="size-4 mr-2" />
-                            Add New
+                        <Button onClick={() => { }} size="sm">
+                            Cancel
                         </Button>
-                        <UploadButton onUpload={onUpload} />
                     </div>
                 </CardHeader>
                 <CardContent>
