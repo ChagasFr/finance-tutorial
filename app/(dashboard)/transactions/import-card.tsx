@@ -7,6 +7,10 @@ const requiredOptions = [
     "payee",
 ];
 
+interface SelectedColumnsState {
+    [key: string]: string | null;
+}
+
 type Props = {
     data: string[][];
     onCancel: () => void;
