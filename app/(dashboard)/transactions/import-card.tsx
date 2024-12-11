@@ -1,3 +1,12 @@
+const dateFormat = "yyyy-MM-dd HH:mm:ss";
+const outputFormat = "yyyy-MM-dd";
+
+const requiredOptions = [
+    "amount",
+    "date",
+    "payee",
+];
+
 type Props = {
     data: string[][];
     onCancel: () => void;
