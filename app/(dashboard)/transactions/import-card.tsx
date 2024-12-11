@@ -30,10 +30,10 @@ export const ImportCard = ({
             <Card className="border-none drop-shadow-sm">
                 <CardHeader className="gap-y-2 lg:flex-row lg:items-center lg:justify-between">
                     <CardTitle className="text-xl line-clamp-1">
-                        Transactions History
+                        Import Transaction
                     </CardTitle>
                     <div className="flex items-center gap-x-2">
-                        <Button onClick={() => { }} size="sm">
+                        <Button onClick={onCancel} size="sm">
                             Cancel
                         </Button>
                     </div>
