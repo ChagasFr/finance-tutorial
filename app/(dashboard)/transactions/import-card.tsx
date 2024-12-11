@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -25,6 +27,11 @@ export const ImportCard = ({
     onCancel,
     onSubmit,
 }: Props) => {
+    const [selectedColumns, SelectedColumnsState] = useState<SelectedColumnsState>({});
+
+    const headers = data[0];
+    const body = data.slice(1)
+
     return (
         <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
             <Card className="border-none drop-shadow-sm">
@@ -39,7 +46,7 @@ export const ImportCard = ({
                     </div>
                 </CardHeader>
                 <CardContent>
-                    Hello
+                    <ImportTable headers={headers} body={body} selectedColumns={selectedColumns} onTableHeadSelectChange={() => { }} />
                 </CardContent>
             </Card>
         </div>
