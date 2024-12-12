@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { ImportTable } from "./import-table";
 
 const dateFormat = "yyyy-MM-dd HH:mm:ss";
 const outputFormat = "yyyy-MM-dd";
