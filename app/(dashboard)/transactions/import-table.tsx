@@ -10,6 +10,37 @@ import {
 type Props = {
     headers: string[];
     body: string[][];
-    selecctedColumns: Record<string, string | null>;
-    onTableHeadSelectChange: (columnIndex: number, value: string | null)
-}
+    selectedColumns: Record<string, string | null>;
+    onTableHeadSelectChange: (columnIndex: number, value: string | null) =>
+        void;
+};
+
+export const ImportTable = ({
+    headers,
+    body,
+    selectedColumns,
+    onTableHeadSelectChange,
+}: Props) => {
+    return (
+        <div className="rounded-md border overflow-hidden">
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        {headers.map((_item, index) => (
+                            <TableHead key={index}>
+                                {index}
+                            </TableHead>
+                        ))}
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {body.map((row: string[], index) => (
+                        <TableRow key={index}>
+                            {row.map((cell, index) => ())}
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </div>
+    )
+};
