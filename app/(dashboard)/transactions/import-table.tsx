@@ -26,9 +26,20 @@ export const ImportTable = ({
             <Table>
                 <TableHeader>
                     <TableRow>
-                        {headers.map((_item, in))}
+                        {headers.map((_item, index) => (
+                            <TableHead key={index}>
+                                {index}
+                            </TableHead>
+                        ))}
                     </TableRow>
                 </TableHeader>
+                <TableBody>
+                    {body.map((row: string[], index) => (
+                        <TableRow key={index}>
+                            {row.map((cell, index) => ())}
+                        </TableRow>
+                    ))}
+                </TableBody>
             </Table>
         </div>
     )
