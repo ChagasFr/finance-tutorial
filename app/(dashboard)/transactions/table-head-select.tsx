@@ -1,6 +1,6 @@
 type Props = {
     columnIndex: number;
-    selectedColumns: Record<String, string | null>;
+    selectedColumns: Record<string, string | null>;
     onChange: (
         columnIndex: number,
         value: string | null
@@ -12,4 +12,8 @@ const options = [
     "payee",
     "notes",
     "date",
-]
+];
+
+export const TableHeadSelect = ({
+
+}: Props) => { }
