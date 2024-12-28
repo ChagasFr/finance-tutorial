@@ -15,5 +15,13 @@ const options = [
 ];
 
 export const TableHeadSelect = ({
-
-}: Props) => { }
+    columnIndex,
+    selectedColumns,
+    onChange
+}: Props) => {
+    return (
+        <div>
+            Select
+        </div>
+    )
+}
