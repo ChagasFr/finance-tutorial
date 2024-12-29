@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/select"
 
 import { cn } from "@/lib/utils";
+import { object } from "zod";
 
 type Props = {
     columnIndex: number;
@@ -29,7 +30,7 @@ export const TableHeadSelect = ({
     selectedColumns,
     onChange
 }: Props) => {
-    const currentSelect = selectedColumns[`column_${columnIndex}`];
+    const currentSelection = selectedColumns[`column_${columnIndex}`];
 
     return (
         <Select
@@ -47,6 +48,8 @@ export const TableHeadSelect = ({
             <SelectContent>
                 <SelectItem value="skip">Skip</SelectItem>
                 {options.map((option, index) => {
+                    const disabled = Object.values(selectedColumns)
+                        .includes(option) && selectedColumns[`column_${columnIndex}`]
                     return (
                         <SelectItem key={index} value={option} disabled={disabled} className="capitalize" />
 
