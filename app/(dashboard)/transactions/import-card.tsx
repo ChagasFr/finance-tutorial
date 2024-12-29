@@ -31,7 +31,24 @@ export const ImportCard = ({
     const [selectedColumns, SelectedColumnsState] = useState<SelectedColumnsState>({});
 
     const headers = data[0];
-    const body = data.slice(1)
+    const body = data.slice(1);
+
+    const onTableHeadSelectChange = (
+        columnIndex: number,
+        value: string | null
+    ) => {
+        setSelectedColumns((prev) => {
+            const newSelectedColumns = { ...prev };
+
+            for (const key in newSelectedColumns) {
+                if (newSelectedColumns[key] === value) {
+                    newSelectedColumns[key] = null
+                }
+            }
+
+
+        });
+    }
 
     return (
         <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
