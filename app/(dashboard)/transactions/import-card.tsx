@@ -46,9 +46,17 @@ export const ImportCard = ({
                 }
             }
 
+            if (value === "skip") {
+                value = null;
+            }
+
+            newSelectedColumns[`column_${columnIndex}`] = value;
+            return newSelectedColumns;
 
         });
-    }
+    };
+
+    const progress = Object.values(selectedColumns).filter(Boolean).length;
 
     return (
         <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
@@ -61,10 +69,13 @@ export const ImportCard = ({
                         <Button onClick={onCancel} size="sm">
                             Cancel
                         </Button>
+                        <Button onClick={onCancel} size="sm">
+                            Continue ({progress} / {requiredOptions.length})
+                        </Button>
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <ImportTable headers={headers} body={body} selectedColumns={selectedColumns} onTableHeadSelectChange={() => { }} />
+                    <ImportTable headers={headers} body={body} selectedColumns={selectedColumns} onTableHeadSelectChange={onTableHeadSelectChange} />
                 </CardContent>
             </Card>
         </div>
