@@ -5,6 +5,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -44,7 +45,13 @@ export const TableHeadSelect = ({
                 <SelectValue placeholder="Skip" />
             </SelectTrigger>
             <SelectContent>
-                <SelectItem />
+                <SelectItem value="skip">Skip</SelectItem>
+                {options.map((option, index) => {
+                    return (
+                        <SelectItem key={index} value={option} disabled={disabled} className="capitalize" />
+
+                    )
+                })}
             </SelectContent>
 
         </Select>
