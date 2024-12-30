@@ -58,6 +58,22 @@ export const ImportCard = ({
 
     const progress = Object.values(selectedColumns).filter(Boolean).length;
 
+    const handleContinue = () => {
+        const getColumnIndex = (column: string) => {
+            return column.split("_")[1];
+        };
+
+        const mappedData = {
+            headers: headers.map((_header, index) => {
+                const columnIndex = getColumnIndex(`column_${index}`);
+                return selectedColumns[`dolumn_${columnIndex}`] || null
+            }),
+            body: body.map((row) => {
+
+            })
+        };
+    };
+
     return (
         <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
             <Card className="border-none drop-shadow-sm">
