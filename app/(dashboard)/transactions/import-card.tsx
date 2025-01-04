@@ -79,6 +79,16 @@ export const ImportCard = ({
                     : transformedRow;
             }).filter((row) => row.length > 0),
         };
+        const arrayOfData = mappedData.body.map((row) => {
+            return row.reduce((acc: any, cell, index) => {
+                const header = mappedData.headers[index];
+                if (header !== null) {
+                    acc[header] = cell;
+                }
+
+                return acc;
+            }, {});
+        })
     };
 
     return (
@@ -99,7 +109,7 @@ export const ImportCard = ({
                         <Button
                             size="sm"
                             disabled={progress < requiredOptions.length}
-                            onClick={() => { }}
+                            onClick={handleContinue}
                             className="w-full lg:w-auto"
                         >
                             Continue ({progress} / {requiredOptions.length})
