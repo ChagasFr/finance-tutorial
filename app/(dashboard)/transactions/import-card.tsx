@@ -69,8 +69,15 @@ export const ImportCard = ({
                 return selectedColumns[`dolumn_${columnIndex}`] || null
             }),
             body: body.map((row) => {
+                const transformedRow = row.map((cell, index) => {
+                    const columnIndex = getColumnIndex(`column_${index}`);
+                    return selectedColumns[`dolumn_${columnIndex}`] ? cell : null;
+                });
 
-            })
+                return transformedRow.every((item) => item === null)
+                    ? []
+                    : transformedRow;
+            }).filter((row) => row.length > 0),
         };
     };
 
