@@ -3,6 +3,8 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ImportTable } from "./import-table";
+import { convertAmountFromMiliunits } from "@/lib/utils";
+import { format, parse } from "date-fns";
 
 const dateFormat = "yyyy-MM-dd HH:mm:ss";
 const outputFormat = "yyyy-MM-dd";
@@ -88,7 +90,15 @@ export const ImportCard = ({
 
                 return acc;
             }, {});
-        })
+        });
+
+        const formattedData = arrayOfData.map((item) => ({
+            ...item,
+            amount: convertAmountFromMiliunits(parseFloat(item.amount)),
+            data: format(parse(item.date, dateFormat, new Date()), outputFormat)
+        }));
+
+        onSubmit(formattedData);
     };
 
     return (
