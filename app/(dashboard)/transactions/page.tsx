@@ -6,7 +6,7 @@ import useGetTransactions from "@/features/transactions/api/use-get-transactions
 import { useNewTransaction } from "@/features/transactions/hooks/use-new-transaction";
 import { useBulkDeleteTransactions } from "@/features/transactions/api/use-bulk-delete-transactions";
 
-import { transactions as transactionsSchema } from "@/db/schema";
+import { transactions as transactionSchema } from "@/db/schema";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/data-table";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -50,8 +50,10 @@ const TransactionsPage = () => {
     const isDisabled = transactionsQuery.isLoading || deleteTransactions.isPending;
 
     const onSubmitImport = async (
-        values: typeof transactions
-    )
+        values: typeof transactionSchema.$inferInsert[],
+    ) => {
+
+    };
 
     if (transactionsQuery.isLoading) {
         return (
