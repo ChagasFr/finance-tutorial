@@ -1,8 +1,10 @@
 "use client";
+import { toast } from "sonner";
 import { useState } from "react";
 import { Loader2, Plus } from "lucide-react";
 
 import useGetTransactions from "@/features/transactions/api/use-get-transactions";
+import { useSelectAccount } from "@/features/accounts/hooks/use-select-account";
 import { useNewTransaction } from "@/features/transactions/hooks/use-new-transaction";
 import { useBulkDeleteTransactions } from "@/features/transactions/api/use-bulk-delete-transactions";
 
@@ -28,6 +30,7 @@ const INITIAL_IMPORT_RESULTS = {
 };
 
 const TransactionsPage = () => {
+    const [AccountDialog, confirm] = useSelectAccount();
     const [variant, setVariant] = useState<VARIANTS>(VARIANTS.LIST);
     const [importResults, setImportResults] = useState
         (INITIAL_IMPORT_RESULTS)
@@ -52,7 +55,16 @@ const TransactionsPage = () => {
     const onSubmitImport = async (
         values: typeof transactionSchema.$inferInsert[],
     ) => {
+        const accountId = await confirm();
 
+        if (!accountId) {
+            return toast.error("Please select an account to continue.");
+        }
+
+        const data = values.map((value) => ({
+            ...value,
+            accountId: accountId as string,
+        }));
     };
 
     if (transactionsQuery.isLoading) {
@@ -75,6 +87,7 @@ const TransactionsPage = () => {
     if (variant === VARIANTS.IMPORT) {
         return (
             <>
+                <AccountDialog />
                 <ImportCard data={importResults.data} onCancel={onCancelImport} onSubmit={onSubmitImport} />
             </>
         )

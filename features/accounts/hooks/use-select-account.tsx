@@ -1,8 +1,10 @@
-import { Button } from "@/components/ui/button";
-import { DialogFooter, DialogHeader, Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
-import { useRef, useState } from "react"
 import useGetAccounts from "../api/use-get-accounts";
 import { useCreateAccount } from "../api/use-create-account";
+
+import { Button } from "@/components/ui/button";
+import { Select } from "@/components/select";
+import { DialogFooter, DialogHeader, Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import { useRef, useState } from "react"
 
 export const useSelectAccount = (
     title: string,
@@ -54,6 +56,13 @@ export const useSelectAccount = (
                         Please select an account to continue.
                     </DialogDescription>
                 </DialogHeader>
+                <Select
+                    placeholder="Select an account"
+                    options={accountOptions}
+                    onCreate={onCreateAccount}
+                    onChange={(value) => selectValue.current = value}
+                    disabled={accountQuery.isLoading || accountMutation.isPeding}
+                />
                 <DialogFooter className="pt-2">
                     <Button onClick={handleCancel} variant="outline">
                         Cancel
