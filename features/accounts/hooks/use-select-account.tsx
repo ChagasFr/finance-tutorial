@@ -1,11 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { DialogFooter, DialogHeader, Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { useState } from "react"
+import useGetAccounts from "../api/use-get-accounts";
+import { useCreateAccount } from "../api/use-create-account";
 
-export const useConfirm = (
+export const useSelectAccount = (
     title: string,
     message: string,
 ): [() => JSX.Element, () => Promise<unknown>] => {
+    const accountQuery = useGetAccounts();
+    const accountMutation = useCreateAccount();
+    const onCreateAccount = (name: string) => accountMutation.mutate({
+        name
+    });
+
     const [promise, setPromise] = useState<{
         resolve: (values: boolean) =>
             void
