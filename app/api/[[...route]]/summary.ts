@@ -1,8 +1,11 @@
 import { z } from "zod";
 import { Hono } from "hono";
+import { and, eq, gte, lte, sql, sum } from "drizzle-orm";
 import { zValidator } from "@hono/zod-validator";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { subDays, parse, differenceInDays } from "date-fns";
+import { db } from "@/db/drizzle";
+import { accounts, transactions } from "@/db/schema";
 
 const app = new Hono().get(
   "/",
@@ -34,7 +37,38 @@ const app = new Hono().get(
 
     const periodLength = differenceInDays(endDate, startDate) + 1;
     const lastPeriodStart = subDays(startDate, periodLength);
-    const lastPeriodEnd = subDays(endtDate, periodLength);
+    const lastPeriodEnd = subDays(endDate, periodLength);
+
+    async function fetchFincancialDate(
+      userId: string,
+      startDate: Date,
+      endDate: Date
+    ) {
+      return await db
+        .select({
+          income:
+            sql`SUM(CASE WHEN ${transactions.amount} >= 0 THEN ${transactions.amount} ELSE 0 END)`.mapWith(
+              Number
+            ),
+          expenses:
+            sql`SUM(CASE WHEN ${transactions.amount} < 0 THEN ${transactions.amount} ELSE 0 END)`.mapWith(
+              Number
+            ),
+          remaining: sum(transactions.amount).mapWith(Number),
+        })
+        .from(transactions)
+        .innerJoin(accounts, eq(transactions.accountId, accounts.id))
+        .where(
+          and(
+            accountId
+              ? eq(transactions.accountId, accountId, accountId)
+              : undefined,
+            eq(accounts.userId, userId),
+            gte(transactions.date, startDate),
+            lte(transactions.date, endDate)
+          )
+        );
+    }
 
     const [currentPeriod] = await fetchFincancialDate(
       auth.userId,
@@ -47,6 +81,11 @@ const app = new Hono().get(
       startDate,
       endDate
     );
+
+    return c.json({
+      currentPeriod,
+      lastPeriod,
+    });
   }
 );
 
