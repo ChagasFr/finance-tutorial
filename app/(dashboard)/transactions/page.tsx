@@ -17,6 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { columns } from "./columns";
 import { UploadButton } from "./upload-button";
 import { ImportCard } from "./import-card";
+import { useBulkCreateTransactions } from "@/features/transactions/api/use-bulk-create-transactions";
 
 enum VARIANTS {
     LIST = "LIST",
@@ -46,6 +47,7 @@ const TransactionsPage = () => {
     };
 
     const newTransaction = useNewTransaction();
+    const createTransactions = useBulkCreateTransactions();
     const deleteTransactions = useBulkDeleteTransactions();
     const transactionsQuery = useGetTransactions();
     const transactions = transactionsQuery.data || [];
@@ -65,6 +67,12 @@ const TransactionsPage = () => {
             ...value,
             accountId: accountId as string,
         }));
+
+        createTransactions.mutate(data, {
+            onSuccess: () => {
+                onCancelImport();
+            }
+        })
     };
 
     if (transactionsQuery.isLoading) {
