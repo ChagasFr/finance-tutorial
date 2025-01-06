@@ -1,8 +1,11 @@
 import { z } from "zod";
 import { Hono } from "hono";
+import { sql, sum } from "drizzle-orm";
 import { zValidator } from "@hono/zod-validator";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { subDays, parse, differenceInDays } from "date-fns";
+import { db } from "@/db/drizzle";
+import { transactions } from "@/db/schema";
 
 const app = new Hono().get(
   "/",
@@ -35,6 +38,26 @@ const app = new Hono().get(
     const periodLength = differenceInDays(endDate, startDate) + 1;
     const lastPeriodStart = subDays(startDate, periodLength);
     const lastPeriodEnd = subDays(endtDate, periodLength);
+
+    async function fetchFincancialDate(
+      userId: string,
+      startDate: Date,
+      endDate: Date
+    ) {
+      return await db
+        .select({
+          income:
+            sql`SUM(CASE WHEN ${transactions.amount} >= 0 THEN ${transactions.amount} ELSE 0 END)`.mapWith(
+              Number
+            ),
+          expenses:
+            sql`SUM(CASE WHEN ${transactions.amount} < 0 THEN ${transactions.amount} ELSE 0 END)`.mapWith(
+              Number
+            ),
+          remaining: sum(transactions.amount).mapWith(Number),
+        })
+        .from(transactions);
+    }
 
     const [currentPeriod] = await fetchFincancialDate(
       auth.userId,
