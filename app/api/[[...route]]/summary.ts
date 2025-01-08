@@ -1,6 +1,6 @@
 import { map, z } from "zod";
 import { Hono } from "hono";
-import { and, eq, gte, lte, sql, sum } from "drizzle-orm";
+import { and, desc, eq, gte, lt, lte, sql, sum } from "drizzle-orm";
 import { zValidator } from "@hono/zod-validator";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { subDays, parse, differenceInDays } from "date-fns";
@@ -117,6 +117,24 @@ const app = new Hono().get(
         categories.id
       )
     )
+    .where(
+      and(
+        accountId
+          ? eq(transactions.accountId, accountId, accountId)
+          : undefined,
+        eq(accounts.userId, auth.userId),
+        lt(transactions.amount, 0),
+        gte(transactions.date, startDate),
+        lte(transactions.date, endDate)
+      )
+    )
+    .groupBy(categories.name)
+    .orderBy(desc(
+      sql`SUM(ABS(${transactions.amount}))`
+    ));
+
+    const topCategories = category.slice(0, 3);
+    const otherCategories = category.slice(3);
 
     return c.json({
       currentPeriod,
