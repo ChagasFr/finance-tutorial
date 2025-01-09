@@ -48,6 +48,18 @@ export function fillMissingDays(
   });
 
   const transactionsByDay = allDays.map((day) => {
-    const found = activeDays.find((d) => isSameDay);
+    const found = activeDays.find((d) => isSameDay(d.date, day));
+
+    if (found) {
+      return found;
+    } else {
+      return {
+        date: day,
+        income: 0,
+        expenses: 0,
+      };
+    }
   });
+
+  return transactionsByDay;
 }
