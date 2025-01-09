@@ -166,11 +166,12 @@ const app = new Hono().get(
             ? eq(transactions.accountId, accountId, accountId)
             : undefined,
           eq(accounts.userId, auth.userId),
-          lt(transactions.amount, 0),
           gte(transactions.date, startDate),
           lte(transactions.date, endDate)
         )
       )
+      .groupBy(transactions.date)
+      .orderBy(transactions.date)
 
     return c.json({
       currentPeriod,
@@ -178,7 +179,8 @@ const app = new Hono().get(
       incomeChange,
       expensesChange,
       remainingChange,
-      finalCategories
+      finalCategories,
+      activeDays
     });
   }
 );
