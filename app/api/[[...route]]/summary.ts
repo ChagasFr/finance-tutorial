@@ -135,6 +135,42 @@ const app = new Hono().get(
 
     const topCategories = category.slice(0, 3);
     const otherCategories = category.slice(3);
+    const otherSum = otherCategories
+      .reduce((sum, current) => sum + current.value, 0);
+
+    const finalCategories = topCategories;
+    if (otherCategories.length > 0) {
+      finalCategories.push({
+        name: "Other",
+        value: otherSum,
+      });
+    }
+
+    const activeDays = await db
+     .select({
+      date: transactions.date,
+      income: sql`SUM(CASE WHEN ${transactions.amount} >= 0 THEN ${transactions.amount} ELSE 0 END)`.mapWith(Number),
+      expenses: sql`SUM(CASE WHEN ${transactions.amount} < 0 THEN ${transactions.amount} ELSE 0 END)`.mapWith(Number),
+     })
+     .from(transactions)
+     .innerJoin(
+       accounts,
+       eq(
+         transactions.accountId,
+         accounts.id,
+       ),
+      )
+      .where(
+        and(
+          accountId
+            ? eq(transactions.accountId, accountId, accountId)
+            : undefined,
+          eq(accounts.userId, auth.userId),
+          lt(transactions.amount, 0),
+          gte(transactions.date, startDate),
+          lte(transactions.date, endDate)
+        )
+      )
 
     return c.json({
       currentPeriod,
@@ -142,6 +178,7 @@ const app = new Hono().get(
       incomeChange,
       expensesChange,
       remainingChange,
+      finalCategories
     });
   }
 );
