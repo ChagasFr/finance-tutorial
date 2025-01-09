@@ -79,15 +79,14 @@ const app = new Hono().get(
 
     const [lastPeriod] = await fetchFincancialDate(
       auth.userId,
-      startDate,
-      endDate
+      lastPeriodStart,
+      lastPeriodEnd
     );
 
     const incomeChange = calculatePercentageChange(
       currentPeriod.income,
       lastPeriod.income
     );
-
     const expensesChange = calculatePercentageChange(
       currentPeriod.expenses,
       lastPeriod.expenses
@@ -98,45 +97,34 @@ const app = new Hono().get(
       lastPeriod.remaining
     );
 
-    const category = await db.select({
-      name: categories.name,
-      value: sql`SUM(ABS(${transactions.amount}))`,mapWith(Number),
-    })
-    .from(transactions)
-    .innerJoin(
-      accounts,
-      eq(
-        transactions.accountId,
-        accounts.id,
-      ),
-    )
-    .innerJoin(
-      categories,
-      eq(
-        transactions.categoryId,
-        categories.id
+    const category = await db
+      .select({
+        name: categories.name,
+        value: sql`SUM(ABS(${transactions.amount}))`.mapWith(Number),
+      })
+      .from(transactions)
+      .innerJoin(accounts, eq(transactions.accountId, accounts.id))
+      .innerJoin(categories, eq(transactions.categoryId, categories.id))
+      .where(
+        and(
+          accountId
+            ? eq(transactions.accountId, accountId, accountId)
+            : undefined,
+          eq(accounts.userId, auth.userId),
+          lt(transactions.amount, 0),
+          gte(transactions.date, startDate),
+          lte(transactions.date, endDate)
+        )
       )
-    )
-    .where(
-      and(
-        accountId
-          ? eq(transactions.accountId, accountId, accountId)
-          : undefined,
-        eq(accounts.userId, auth.userId),
-        lt(transactions.amount, 0),
-        gte(transactions.date, startDate),
-        lte(transactions.date, endDate)
-      )
-    )
-    .groupBy(categories.name)
-    .orderBy(desc(
-      sql`SUM(ABS(${transactions.amount}))`
-    ));
+      .groupBy(categories.name)
+      .orderBy(desc(sql`SUM(ABS(${transactions.amount}))`));
 
     const topCategories = category.slice(0, 3);
     const otherCategories = category.slice(3);
-    const otherSum = otherCategories
-      .reduce((sum, current) => sum + current.value, 0);
+    const otherSum = otherCategories.reduce(
+      (sum, current) => sum + current.value,
+      0
+    );
 
     const finalCategories = topCategories;
     if (otherCategories.length > 0) {
@@ -147,19 +135,19 @@ const app = new Hono().get(
     }
 
     const activeDays = await db
-     .select({
-      date: transactions.date,
-      income: sql`SUM(CASE WHEN ${transactions.amount} >= 0 THEN ${transactions.amount} ELSE 0 END)`.mapWith(Number),
-      expenses: sql`SUM(CASE WHEN ${transactions.amount} < 0 THEN ${transactions.amount} ELSE 0 END)`.mapWith(Number),
-     })
-     .from(transactions)
-     .innerJoin(
-       accounts,
-       eq(
-         transactions.accountId,
-         accounts.id,
-       ),
-      )
+      .select({
+        date: transactions.date,
+        income:
+          sql`SUM(CASE WHEN ${transactions.amount} >= 0 THEN ${transactions.amount} ELSE 0 END)`.mapWith(
+            Number
+          ),
+        expenses:
+          sql`SUM(CASE WHEN ${transactions.amount} < 0 THEN ${transactions.amount} ELSE 0 END)`.mapWith(
+            Number
+          ),
+      })
+      .from(transactions)
+      .innerJoin(accounts, eq(transactions.accountId, accounts.id))
       .where(
         and(
           accountId
@@ -171,13 +159,9 @@ const app = new Hono().get(
         )
       )
       .groupBy(transactions.date)
-      .orderBy(transactions.date)
+      .orderBy(transactions.date);
 
-      const days = fillMissingDays (
-        activeDays,
-        startDate,
-        endDate
-      );
+    const days = fillMissingDays(activeDays, startDate, endDate);
 
     return c.json({
       data: {
@@ -190,8 +174,7 @@ const app = new Hono().get(
         currentPeriod,
         categories: finalCategories,
         days,
-
-      }
+      },
     });
   }
 );
