@@ -6,7 +6,7 @@ import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { subDays, parse, differenceInDays } from "date-fns";
 import { db } from "@/db/drizzle";
 import { accounts, categories, transactions } from "@/db/schema";
-import { calculatePercentageChange, fillMissingDays } from "@/lib/utils";
+import { calculatPercentageChange, fillMissingDays } from "@/lib/utils";
 
 const app = new Hono().get(
   "/",
@@ -83,16 +83,16 @@ const app = new Hono().get(
       lastPeriodEnd
     );
 
-    const incomeChange = calculatePercentageChange(
+    const incomeChange = calculatPercentageChange(
       currentPeriod.income,
       lastPeriod.income
     );
-    const expensesChange = calculatePercentageChange(
+    const expensesChange = calculatPercentageChange(
       currentPeriod.expenses,
       lastPeriod.expenses
     );
 
-    const remainingChange = calculatePercentageChange(
+    const remainingChange = calculatPercentageChange(
       currentPeriod.remaining,
       lastPeriod.remaining
     );
