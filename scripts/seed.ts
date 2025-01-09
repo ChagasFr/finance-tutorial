@@ -1,4 +1,4 @@
-import { categories, transactions } from "@/db/schema";
+import { accounts, categories, transactions } from "@/db/schema";
 import { neon } from "@neondatabase/serverless";
 import { eachDayOfInterval, format, subDays } from "date-fns";
 import { config } from "dotenv";
@@ -65,6 +65,29 @@ const generateTransactionsForDay = (day: Date) => {
       accountId: SEED_ACCOUNTS[0].id, // Assuming always using the first account for simplicity
 
       categoryId: category.id,
+      date: day,
+      amount: formattedAmount,
+      payee: "Merchant",
+      notes: "Random transaction",
     });
   }
 };
+
+const generateTransactions = () => {
+  const days = eachDayOfInterval({ start: defaultfrom, end: defaultTo });
+  days.forEach(day => generateTransactionsForDay(day));
+};
+
+generateTransactions();
+
+const main = async () => {
+    try{
+        // Reset database
+        await db.delete(transactions).execute();
+        await db.delete(accounts).execute();
+        await db.delete(categories).execute();
+        // Seed categories
+        await db.insert(categories).values(SEED_CATEGORIES).execute();
+        // Seed accounts
+    }
+}
