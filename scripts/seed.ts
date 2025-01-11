@@ -75,19 +75,25 @@ const generateTransactionsForDay = (day: Date) => {
 
 const generateTransactions = () => {
   const days = eachDayOfInterval({ start: defaultfrom, end: defaultTo });
-  days.forEach(day => generateTransactionsForDay(day));
+  days.forEach((day) => generateTransactionsForDay(day));
 };
 
 generateTransactions();
 
 const main = async () => {
-    try{
-        // Reset database
-        await db.delete(transactions).execute();
-        await db.delete(accounts).execute();
-        await db.delete(categories).execute();
-        // Seed categories
-        await db.insert(categories).values(SEED_CATEGORIES).execute();
-        // Seed accounts
-    }
-}
+  try {
+    // Reset database
+    await db.delete(transactions).execute();
+    await db.delete(accounts).execute();
+    await db.delete(categories).execute();
+    // Seed categories
+    await db.insert(accounts).values(SEED_ACCOUNTS).execute();
+    // Seed transactions
+    await db.insert(transactions).values(SEED_TRANSACTIONS).execute();
+  } catch (error) {
+    console.log("Error during seed:", error);
+    process.exit(1);
+  }
+};
+
+main();
