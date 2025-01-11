@@ -11,9 +11,9 @@ export const useGetSummary = () => {
   const accountId = params.get("accountId") || "";
 
   const query = useQuery({
-    queryKey: ["transactions", { from, to, accountId }],
+    queryKey: ["summary", { from, to, accountId }],
     queryFn: async () => {
-      const response = await client.api.transactions.$get({
+      const response = await client.api.summary.$get({
         query: {
           from,
           to,
@@ -22,14 +22,25 @@ export const useGetSummary = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch transactions");
+        throw new Error("Failed to fetch summary");
       }
 
       const { data } = await response.json();
-      return data.map((transaction) => ({
-        ...transaction,
-        amount: convertAmountFromMiliunits(transaction.amount),
-      }));
+      return {
+        ...data,
+        incomeAmount: convertAmountFromMiliunits(data.incomeAmount),
+        expensesAmount: convertAmountFromMiliunits(data.expensesAmount),
+        remainingAmount: convertAmountFromMiliunits(data.remainingAmount),
+        categories: data.categories.map((category) => ({
+          ...category,
+          value: convertAmountFromMiliunits(category.value),
+        })),
+        days: data.days.map((day) => ({
+          ...day,
+          income: convertAmountFromMiliunits(day.income),
+          expenses: convertAmountFromMiliunits(day.expenses),
+        })),
+      };
     },
   });
 
