@@ -5,6 +5,7 @@ import { FaPiggyBank } from "react-icons/fa";
 import useGetSummary from "@/features/summary/api/use-get-summary";
 
 import { formatDateRange } from "@/lib/utils";
+import { DataCard } from "./data-card";
 
 export const DataGrid = () => {
     const { data } = useGetSummary();
