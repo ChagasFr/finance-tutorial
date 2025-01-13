@@ -2,7 +2,8 @@ import { IconType } from "react-icons/lib";
 import { cva, VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
-import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import { Countup } from "@/components/count-up"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 
 const boxVariant = cva(
     "shrink-0 rounded-md p-3",
@@ -72,6 +73,9 @@ export const DataCard = ({
                     <Icon className={cn(iconVariant({ variant }))} />
                 </div>
             </CardHeader>
+            <CardContent>
+
+            </CardContent>
         </Card>
     )
 }
