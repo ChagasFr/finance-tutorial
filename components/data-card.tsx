@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
 
 const boxVariant = cva(
-    "rounded-md p-3",
+    "shrink-0 rounded-md p-3",
     {
         variants: {
             variant: {
@@ -68,8 +68,8 @@ export const DataCard = ({
                         {dateRange}
                     </CardDescription>
                 </div>
-                <div className={cn("shrink-0", boxVariant({ variant }),)}>
-                    <Icon className={cn(i)} />
+                <div className={cn(boxVariant({ variant }))}>
+                    <Icon className={cn(iconVariant({ variant }))} />
                 </div>
             </CardHeader>
         </Card>
