@@ -1,7 +1,8 @@
 import { IconType } from "react-icons/lib";
-import { cva } from "class-variance-authority";
+import { cva, VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
+import { Card } from "./ui/card";
 
 const boxVariant = cva(
     "rounded-md p-3",
@@ -40,12 +41,25 @@ const iconVariant = cva(
 type BoxVariants = VariantProps<typeof boxVariant>;
 type IconVariants = VariantProps<typeof iconVariant>;
 
-interface DataCardProps extends BoxVariants, IconVariants
+interface DataCardProps extends BoxVariants, IconVariants {
+    icon: IconType;
+    title: string;
+    value?: number;
+    dateRange: string;
+    percentageChange?: number;
+}
 
-export const DataCard = () => {
+export const DataCard = ({
+    icon: Icon,
+    title,
+    value = 0,
+    variant,
+    dateRange,
+    percentageChange = 0,
+}: DataCardProps) => {
     return (
-        <div>
+        <Card>
             Data Card
-        </div>
+        </Card>
     )
 }
