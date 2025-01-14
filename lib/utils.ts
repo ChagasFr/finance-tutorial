@@ -97,4 +97,6 @@ export function formatPercentage(
   if (options.addPrefix && value > 0) {
     return `+${result}`;
   }
+
+  return result;
 }
