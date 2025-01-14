@@ -1,6 +1,7 @@
 "use client";
 import { useSearchParams } from "next/navigation";
 import { FaPiggyBank } from "react-icons/fa";
+import { FaArrowTrendUp, FaArrowTrendDown } from "react-icons/fa6";
 
 import useGetSummary from "@/features/summary/api/use-get-summary";
 
@@ -21,7 +22,22 @@ export const DataGrid = () => {
             <DataCard
                 title="Remaining"
                 value={data?.remainingAmount}
-                parcentageChange={data?.remainingChange}
+                percentageChange={data?.remainingChange}
+                icon={FaPiggyBank}
+                dateRange={dateRangeLabel}
+            />
+            <DataCard
+                title="Income"
+                value={data?.incomeAmount}
+                percentageChange={data?.incomeChange}
+                icon={FaArrowTrendUp}
+                dateRange={dateRangeLabel}
+            />
+
+            <DataCard
+                title="Remaining"
+                value={data?.remainingAmount}
+                percentageChange={data?.remainingChange}
                 icon={FaPiggyBank}
                 dateRange={dateRangeLabel}
             />
