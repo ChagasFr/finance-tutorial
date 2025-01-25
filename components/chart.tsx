@@ -1,7 +1,14 @@
 import { useState } from "react";
-import { FileSearch } from "lucide-react";
+import { AreaChart, FileSearch } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 import { AreaVariant } from "./area-variant";
 import { BarVariant } from "./bar-variant";
 import { LineVariant } from "./line-variant";
@@ -28,7 +35,18 @@ export const Chart = ({ data = [] }: Props) => {
                 <CardTitle className="text-xl line-clamp-1">
                     Transactions
                 </CardTitle>
-                {/* TODO: Add select */}
+                <Select defaultValue={chartType} onValueChange={onTypeChange}>
+                    <SelectTrigger className="lg:w-auto h-9 rounded-md px-3">
+                        <SelectValue placeholder="Chart type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="area">
+                            <div className="flex items-center">
+                                <AreaChart />
+                            </div>
+                        </SelectItem>
+                    </SelectContent>
+                </Select>
             </CardHeader>
             <CardContent>
                 {data.length === 0 ? (
