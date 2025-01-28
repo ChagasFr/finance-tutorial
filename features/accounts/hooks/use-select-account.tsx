@@ -2,7 +2,7 @@ import useGetAccounts from "../api/use-get-accounts";
 import { useCreateAccount } from "../api/use-create-account";
 
 import { Button } from "@/components/ui/button";
-import { Select } from "@/components/select";
+import { Select } from "@/components/ui/select";
 import { DialogFooter, DialogHeader, Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { useRef, useState } from "react"
 
