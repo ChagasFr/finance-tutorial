@@ -32,7 +32,7 @@ export const SpendingPie = ({ data = [] }: Props) => {
         <Card className="border-none drop-shadow-sm">
             <CardHeader className="flex space-y-2 lg:space-y-0 lg:flex-row lg:items-center justify-between">
                 <CardTitle className="text-xl line-clamp-1">
-                    Transactions
+                    Categories
                 </CardTitle>
                 <Select defaultValue={chartType} onValueChange={onTypeChange}>
                     <SelectTrigger className="lg:w-auto h-9 rounded-md px-3">
@@ -57,11 +57,11 @@ export const SpendingPie = ({ data = [] }: Props) => {
                             </div>
                         </SelectItem>
 
-                        <SelectItem value="bar">
+                        <SelectItem value="radial">
                             <div className="flex items-center">
-                                <BarChart className="size-4 mr-4 shrink-0" />
+                                <Target className="size-4 mr-4 shrink-0" />
                                 <p className="line-clamp-1">
-                                    Bar chart
+                                    Radial chart
                                 </p>
                             </div>
                         </SelectItem>
@@ -78,9 +78,9 @@ export const SpendingPie = ({ data = [] }: Props) => {
                     </div>
                 ) : (
                     <>
-                        {chartType === "line" && <LineVariant data={data} />}
-                        {chartType === "area" && <AreaVariant data={data} />}
-                        {chartType === "bar" && <BarVariant data={data} />}
+                        {chartType === "pie" && <LineVariant data={data} />}
+                        {chartType === "radar" && <AreaVariant data={data} />}
+                        {chartType === "radial" && <BarVariant data={data} />}
                     </>
                 )}
             </CardContent>
