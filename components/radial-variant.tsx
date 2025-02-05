@@ -19,6 +19,13 @@ export const RadialVariant = ({ data }: Props) => {
             <RadialBarChart
                 cx="50%"
                 cy="50%"
+                barSize={10}
+                innerRadius="90%"
+                outerRadius="40%"
+                data={data.map((item, index) => ({
+                    ...item,
+                    fill: COLORS[index % COLORS.length]
+                }))}
             >
                 <Legend
                     layout="horizontal"
@@ -49,25 +56,8 @@ export const RadialVariant = ({ data }: Props) => {
                     }}
                 />
                 <Tooltip content={< CategoryTooltip />} />
-                <Pie
-                    data={data}
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={90}
-                    innerRadius={60}
-                    paddingAngle={2}
-                    fill="#8884D8"
-                    dataKey="value"
-                    labelLine={false}
-                >
-                    {data.map((_entry, index) => (
-                        <Cell
-                            key={`cell-${index}`}
-                            fill={COLORS[index % COLORS.length]}
-                        />
-                    ))}
-                </Pie>
-            </PieChart>
+                <RadialBarChart />
+            </RadialBarChart>
         </ResponsiveContainer>
     );
 };
