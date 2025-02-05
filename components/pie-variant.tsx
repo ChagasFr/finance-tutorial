@@ -29,7 +29,15 @@ export const PieVariat = ({ data }: Props) => {
                                         key={`item-${index}`}
                                         className="flex items-center space-x-2"
                                     >
-
+                                        <span
+                                            className="size-2 rounded-full"
+                                            style={{ backgroundColor: entry.color }}
+                                        />
+                                        <div className="space-x-1">
+                                            <span className="text-sm">
+                                                {formatPercentage(entry.payload.percent * 100)}
+                                            </span>
+                                        </div>
                                     </li>
                                 ))}
                             </ul>
