@@ -2,6 +2,7 @@ import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recha
 
 import { formatPercentage } from "@/lib/utils";
 import { index } from "drizzle-orm/mysql-core";
+import { CategoryTooltip } from "./category-tooltip";
 
 const COLORS = ["#0062FF", "#12C6FF", "#FF647F", "#FF9354"];
 
@@ -29,13 +30,22 @@ export const PieVariat = ({ data }: Props) => {
                                         key={`item-${index}`}
                                         className="flex items-center space-x-2"
                                     >
-
+                                        <span
+                                            className="size-2 rounded-full"
+                                            style={{ backgroundColor: entry.color }}
+                                        />
+                                        <div className="space-x-1">
+                                            <span className="text-sm">
+                                                {formatPercentage(entry.payload.percent * 100)}
+                                            </span>
+                                        </div>
                                     </li>
                                 ))}
                             </ul>
                         )
                     }}
                 />
+                <Tooltip content={< CategoryTooltip />} />
                 <Pie
                     data={data}
                     cx="50%"
