@@ -1,4 +1,4 @@
-import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
+import { RadialBar, RadialBarChart, Legend, ResponsiveContainer, Tooltip } from "recharts";
 
 import { formatPercentage } from "@/lib/utils";
 import { index } from "drizzle-orm/mysql-core";
@@ -16,12 +16,15 @@ type Props = {
 export const RadialVariant = ({ data }: Props) => {
     return (
         <ResponsiveContainer width="100%" height={350}>
-            <PieChart>
+            <RadialBarChart
+                cx="50%"
+                cy="50%"
+            >
                 <Legend
                     layout="horizontal"
                     verticalAlign="bottom"
-                    align="righ"
-                    inconType="circle"
+                    align="right"
+                    iconType="circle"
                     content={({ payload }: any) => {
                         return (
                             <ul className="flex flex-col space-y-2">
