@@ -16,7 +16,26 @@ export const PieVariat = ({ data }: Props) => {
     return (
         <ResponsiveContainer width="100%" height={350}>
             <PieChart>
-                <Legend />
+                <Legend
+                    layout="horizontal"
+                    verticalAlign="bottom"
+                    align="righ"
+                    inconType="circle"
+                    content={({ payload }: any) => {
+                        return (
+                            <ul className="flex flex-col space-y-2">
+                                {payload.map((entry: any, index: number) => (
+                                    <li
+                                        key={`item-${index}`}
+                                        className="flex items-center space-x-2"
+                                    >
+
+                                    </li>
+                                ))}
+                            </ul>
+                        )
+                    }}
+                />
                 <Pie
                     data={data}
                     cx="50%"

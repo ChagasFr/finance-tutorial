@@ -12,6 +12,7 @@ import {
 import { AreaVariant } from "./area-variant";
 import { BarVariant } from "./bar-variant";
 import { LineVariant } from "./line-variant";
+import { PieVariat } from "./pie-variant";
 
 type Props = {
     data?: {
@@ -78,7 +79,7 @@ export const SpendingPie = ({ data = [] }: Props) => {
                     </div>
                 ) : (
                     <>
-                        {chartType === "pie" && <LineVariant data={data} />}
+                        {chartType === "pie" && <PieVariat data={data} />}
                         {chartType === "radar" && <AreaVariant data={data} />}
                         {chartType === "radial" && <BarVariant data={data} />}
                     </>
