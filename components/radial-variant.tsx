@@ -1,7 +1,6 @@
 import { RadialBar, RadialBarChart, Legend, ResponsiveContainer, Tooltip } from "recharts";
 
-import { formatPercentage } from "@/lib/utils";
-import { index } from "drizzle-orm/mysql-core";
+import { formatCurrency } from "@/lib/utils";
 import { CategoryTooltip } from "./category-tooltip";
 
 const COLORS = ["#0062FF", "#12C6FF", "#FF647F", "#FF9354"];
@@ -19,7 +18,23 @@ export const RadialVariant = ({ data }: Props) => {
             <RadialBarChart
                 cx="50%"
                 cy="50%"
+                barSize={10}
+                innerRadius="90%"
+                outerRadius="40%"
+                data={data.map((item, index) => ({
+                    ...item,
+                    fill: COLORS[index % COLORS.length]
+                }))}
             >
+                <RadialBar
+                    label={{
+                        position: "insideStart",
+                        fill: "#fff",
+                        fontSize: "12px"
+                    }}
+                    background
+                    dataKey="value"
+                />
                 <Legend
                     layout="horizontal"
                     verticalAlign="bottom"
@@ -39,7 +54,7 @@ export const RadialVariant = ({ data }: Props) => {
                                         />
                                         <div className="space-x-1">
                                             <span className="text-sm">
-                                                {formatPercentage(entry.payload.percent * 100)}
+                                                {formatCurrency(entry.payload.value)}
                                             </span>
                                         </div>
                                     </li>
@@ -49,25 +64,8 @@ export const RadialVariant = ({ data }: Props) => {
                     }}
                 />
                 <Tooltip content={< CategoryTooltip />} />
-                <Pie
-                    data={data}
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={90}
-                    innerRadius={60}
-                    paddingAngle={2}
-                    fill="#8884D8"
-                    dataKey="value"
-                    labelLine={false}
-                >
-                    {data.map((_entry, index) => (
-                        <Cell
-                            key={`cell-${index}`}
-                            fill={COLORS[index % COLORS.length]}
-                        />
-                    ))}
-                </Pie>
-            </PieChart>
+                <RadialBarChart />
+            </RadialBarChart>
         </ResponsiveContainer>
     );
 };
