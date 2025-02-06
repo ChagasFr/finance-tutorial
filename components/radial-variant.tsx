@@ -1,7 +1,6 @@
 import { RadialBar, RadialBarChart, Legend, ResponsiveContainer, Tooltip } from "recharts";
 
-import { formatPercentage } from "@/lib/utils";
-import { index } from "drizzle-orm/mysql-core";
+import { formatCurrency } from "@/lib/utils";
 import { CategoryTooltip } from "./category-tooltip";
 
 const COLORS = ["#0062FF", "#12C6FF", "#FF647F", "#FF9354"];
@@ -27,6 +26,15 @@ export const RadialVariant = ({ data }: Props) => {
                     fill: COLORS[index % COLORS.length]
                 }))}
             >
+                <RadialBar
+                    label={{
+                        position: "insideStart",
+                        fill: "#fff",
+                        fontSize: "12px"
+                    }}
+                    background
+                    dataKey="value"
+                />
                 <Legend
                     layout="horizontal"
                     verticalAlign="bottom"
@@ -46,7 +54,7 @@ export const RadialVariant = ({ data }: Props) => {
                                         />
                                         <div className="space-x-1">
                                             <span className="text-sm">
-                                                {formatPercentage(entry.payload.percent * 100)}
+                                                {formatCurrency(entry.payload.value)}
                                             </span>
                                         </div>
                                     </li>
