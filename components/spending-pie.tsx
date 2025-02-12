@@ -12,6 +12,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import { Skeleton } from "./ui/skeleton";
 
 type Props = {
     data?: {
@@ -83,6 +84,20 @@ export const SpendingPie = ({ data = [] }: Props) => {
                         {chartType === "radial" && <RadialVariant data={data} />}
                     </>
                 )}
+            </CardContent>
+        </Card>
+    );
+};
+
+export const SpendingPieLoading = () => {
+    return (
+        <Card className="border-none drop-shadow-sm">
+            <CardHeader className="flex space-y-2 lg:space-y-0 lg:flex-row lg:items-center justify-between">
+                <Skeleton className="h-8 w-48" />
+                <Skeleton className="h-8 lg:w-[120px] 2-full" />
+            </CardHeader>
+            <CardContent>
+
             </CardContent>
         </Card>
     )

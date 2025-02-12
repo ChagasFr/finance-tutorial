@@ -63,7 +63,6 @@ export const RadialVariant = ({ data }: Props) => {
                         )
                     }}
                 />
-                <Tooltip content={< CategoryTooltip />} />
                 <RadialBarChart />
             </RadialBarChart>
         </ResponsiveContainer>
