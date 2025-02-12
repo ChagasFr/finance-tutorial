@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FileSearch, PieChart, Radar, Target } from "lucide-react";
+import { FileSearch, Loader2, PieChart, Radar, Target } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PieVariat } from "@/components/pie-variant";
@@ -97,7 +97,9 @@ export const SpendingPieLoading = () => {
                 <Skeleton className="h-8 lg:w-[120px] 2-full" />
             </CardHeader>
             <CardContent>
-
+                <div className="h-[350px] w-full flex items-center justify-center">
+                    <Loader2 className="h-6 2-6 text-slate-300 animate-spin" />
+                </div>
             </CardContent>
         </Card>
     )
