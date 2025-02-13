@@ -4,6 +4,7 @@ import Navigation from "./navigation"
 import HeaderLogo from "./header-logo"
 import { Loader2 } from "lucide-react"
 import WelcomeMsg from "./welcome-msg"
+import { Filters } from "./filters"
 
 const Header = () => {
     return (
