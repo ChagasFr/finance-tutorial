@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AreaChart, BarChart, FileSearch, LineChart } from "lucide-react";
+import { AreaChart, BarChart, FileSearch, LineChart, Loader2 } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -12,6 +12,7 @@ import {
 import { AreaVariant } from "./area-variant";
 import { BarVariant } from "./bar-variant";
 import { LineVariant } from "./line-variant";
+import { Skeleton } from "./ui/skeleton";
 
 type Props = {
     data?: {
