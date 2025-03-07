@@ -18,7 +18,10 @@ import {
 } from "@/components/ui/select"
 
 export const AccountFilter = () => {
-    const params = useSearchParams
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const params = useSearchParams();
     const accountId = params.get("accountId") || "all";
     const from = params.get("from") || "";
     const to = params.get("to") || "";
