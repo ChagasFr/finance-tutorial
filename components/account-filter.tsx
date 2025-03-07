@@ -18,6 +18,11 @@ import {
 } from "@/components/ui/select"
 
 export const AccountFilter = () => {
+    const params = useSearchParams
+    const accountId = params.get("accountId") || "all";
+    const from = params.get("from") || "";
+    const to = params.get("to") || "";
+
     const {
         data: accounts,
         isLoading: isLoadingAccounts,
@@ -25,7 +30,7 @@ export const AccountFilter = () => {
 
     return (
         <Select
-            value=""
+            value={accountId}
             onValueChange={() => { }}
             disabled={false}
         >
@@ -36,13 +41,13 @@ export const AccountFilter = () => {
                 focus:ring-transparent outline-none text-white 
                 focus:bg-white/30 transition"
             >
-                <SelectValue placeholder="Account" />
+                <SelectValue placeholder="Select account" />
             </SelectTrigger>
             <SelectContent>
                 <SelectItem value="all">
                     All accounts
                 </SelectItem>
-                {accounts?.map((accounts) => (
+                {accounts?.map((account) => (
                     <SelectItem key={account.id} value={account.id}>
                         {account.name}
                     </SelectItem>
