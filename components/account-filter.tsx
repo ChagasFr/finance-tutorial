@@ -8,6 +8,7 @@ import {
 } from "next/navigation";
 
 import { useGetAccounts } from "@/features/accounts/api/use-get-accounts";
+import { useGetSummary } from "@/features/summary/api/use-get-summary"
 
 import {
     Select,
@@ -31,11 +32,29 @@ export const AccountFilter = () => {
         isLoading: isLoadingAccounts,
     } = useGetAccounts();
 
+    const onChange = (newValue: string) => {
+        const query = {
+            accountId: newValue,
+            from,
+            to,
+        };
+        if (newValue === "all") {
+            query.accountId = "";
+        }
+
+        const url = qs.stringifyUrl({
+            url: pathname,
+            query,
+        }, { skipNull: true, skipEmptyString: true });
+
+        router.push(url);
+    }
+
     return (
         <Select
             value={accountId}
-            onValueChange={() => { }}
-            disabled={false}
+            onValueChange={onChange}
+            disabled={isLoadingAccounts}
         >
             <SelectTrigger
                 className="lg:w-auto w-full h-9 rounded-md px-3 
