@@ -28,6 +28,10 @@ export const AccountFilter = () => {
     const to = params.get("to") || "";
 
     const {
+        isLoading: isLoadingSummary,
+    } = useGetAccounts();
+
+    const {
         data: accounts,
         isLoading: isLoadingAccounts,
     } = useGetAccounts();
@@ -54,7 +58,7 @@ export const AccountFilter = () => {
         <Select
             value={accountId}
             onValueChange={onChange}
-            disabled={isLoadingAccounts}
+            disabled={isLoadingAccounts || isLoadingSummary}
         >
             <SelectTrigger
                 className="lg:w-auto w-full h-9 rounded-md px-3 
