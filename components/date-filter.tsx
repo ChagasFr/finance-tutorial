@@ -1,7 +1,8 @@
 "use client";
+import { useState } from "react";
 
 import qs from "query-string";
-import { format, subDays } from "date-fns";
+import { format, formatDate, subDays } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { ChevronDown } from "lucide-react";
@@ -25,6 +26,24 @@ import {
 } from "@/components/ui/popover";
 
 export const DateFilter = () => {
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const params = useSearchParams();
+    const accountId = params.get("accountId") || "all";
+    const from = params.get("from") || "";
+    const to = params.get("to") || "";
+
+    const defaultTo = new Date();
+    const defaultFrom = subDays(defaultTo, 30);
+
+    const paramState = {
+        from: from ? new Date(from) : defaultFrom,
+        to: to ? new Date(to) : defaultTo,
+    };
+
+    const [] = useState();
+
     return (
         <Popover>
             <PopoverTrigger asChild>
@@ -38,7 +57,7 @@ export const DateFilter = () => {
                     focus:ring-transparent outline-none text-white 
                     focus:bg-white/30 transition"
                 >
-
+                    <span>{formatDateRange(paramState)}</span>
                 </Button>
             </PopoverTrigger>
         </Popover>
