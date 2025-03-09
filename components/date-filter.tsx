@@ -42,7 +42,28 @@ export const DateFilter = () => {
         to: to ? new Date(to) : defaultTo,
     };
 
-    const [] = useState();
+    const [date, setDate] = useState<DateRange | undefined>(
+        paramState
+    );
+
+    const pushToUrl = (dateRange: DateRange | undefined) => {
+        const query = {
+            from: format(dateRange?.from || defaultFrom, "yyyy-MM-dd"),
+            to: format(dateRange?.to || defaultTo, "yyyy-MM-dd"),
+        }
+
+        const url = qs.stringifyUrl({
+            url: pathname,
+            query,
+        }, { skipEmptyString: true, skipNull: true, });
+
+        router.push(url);
+    };
+
+    const onReset = () => {
+        setDate(undefined);
+        pushToUrl(undefined);
+    };
 
     return (
         <Popover>
@@ -58,8 +79,15 @@ export const DateFilter = () => {
                     focus:bg-white/30 transition"
                 >
                     <span>{formatDateRange(paramState)}</span>
+                    <ChevronDown className="ml-2 size-4 opacity-50" />
                 </Button>
             </PopoverTrigger>
+            <PopoverContent
+                className="lg:w-auto w-full p-0"
+                align="start"
+            >
+                <Calendar />
+            </PopoverContent>
         </Popover>
     );
 };
